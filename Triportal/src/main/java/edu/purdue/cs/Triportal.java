@@ -13,6 +13,8 @@ import android.app.Application;
 import com.parse.Parse;
 import com.parse.ParseACL;
 import com.parse.ParseUser;
+import android.content.Context;
+import android.support.multidex.MultiDex;
 
 
 public class Triportal extends Application {
@@ -20,6 +22,7 @@ public class Triportal extends Application {
   @Override
   public void onCreate() {
     super.onCreate();
+    MultiDex.install(this);
 
     // Enable Local Datastore.
     Parse.enableLocalDatastore(this);
@@ -32,5 +35,10 @@ public class Triportal extends Application {
     // Optionally enable public read access.
     // defaultACL.setPublicReadAccess(true);
     ParseACL.setDefaultACL(defaultACL, true);
+  }
+
+  @Override protected void attachBaseContext(Context base) {
+    super.attachBaseContext(base);
+    MultiDex.install(this);
   }
 }
