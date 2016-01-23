@@ -10,8 +10,15 @@
            xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
-        <!-- Customize your theme here. -->
+    <style name="BaseTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="colorPrimary">@color/app_theme</item>
+        <item name="colorPrimaryDark">@color/app_theme_dark</item>
+        <item name="android:windowBackground">@color/dim_foreground_material_dark</item>
+    </style>
+    <style name="AppTheme" parent="BaseTheme">
+
     </style>
 
     <style name="SplashTheme" parent="android:Theme.Black.NoTitleBar">
