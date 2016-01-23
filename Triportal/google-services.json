@@ -1,0 +1,51 @@
+{
+  "project_info": {
+    "project_id": "triportal-6c1d2",
+    "project_number": "727696113620",
+    "name": "Triportal"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:727696113620:android:15c0dc06ec051ab0",
+        "client_id": "android:edu.purdue.cs",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "edu.purdue.cs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "727696113620-1fovf8ntilmrbjt641ejst4cmcm6okvv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.purdue.cs",
+            "certificate_hash": "D4DA7B43DFAE2C9FE1E315EC550F6A8E782CB70A"
+          }
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 1,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}
