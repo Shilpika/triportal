@@ -2,7 +2,7 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             android:background="#009944"
+             android:background="#87bf61"
              tools:context="edu.purdue.cs.SplashScreen">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
