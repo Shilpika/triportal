@@ -24,3 +24,8 @@ the application will generate the total time and suggested route for you.
 * You can comment on other’s plans.
 * Web application that has the same functions as the mobile application.
 * Divide plans to several parts so that you can choose the parts you like and add them to own plans.
+
+## Documentations
+
+* [Project Charpter](https://drive.google.com/file/d/0B-nOlzhNfFqmUmZVY1J6Z0RleEE/view?usp=sharing)
+* [Product Backlog](https://docs.google.com/document/d/170aPAmMMi1Qg2QPUFXi9wvfOk3OqoXYsLeglPbnjPtQ/edit?usp=sharing)
