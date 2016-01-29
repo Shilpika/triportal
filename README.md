@@ -1,5 +1,7 @@
 # Triportal
 
+[![Join the chat at https://gitter.im/triportal/triportal](https://badges.gitter.im/triportal/triportal.svg)](https://gitter.im/triportal/triportal?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 > Trip planner right inside your pocket.
 
 Preparing for a trip always costs a great amount of time, it is always inconvenient to search for
