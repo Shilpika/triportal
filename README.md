@@ -29,5 +29,5 @@ the application will generate the total time and suggested route for you.
 
 ## Documentations
 
-* [Project Charpter](https://drive.google.com/file/d/0B-nOlzhNfFqmUmZVY1J6Z0RleEE/view?usp=sharing)
-* [Product Backlog](https://docs.google.com/document/d/170aPAmMMi1Qg2QPUFXi9wvfOk3OqoXYsLeglPbnjPtQ/edit?usp=sharing)
+* [Project Charpter](https://docs.google.com/document/d/1SsHvgLASRSHLI29AF5xqcd_Y-9q9eHpACpziut4Q3R8/pub)
+* [Product Backlog](https://docs.google.com/document/d/1EiDIPek90S2pl-K-TotOuw324NF-rRds8CfG7OUqFJs/pub)
