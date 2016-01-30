@@ -1,4 +1,4 @@
-package edu.purdue.cs.util;
+package edu.purdue.cs.util.ui;
 
 import android.annotation.TargetApi;
 import android.app.Activity;

@@ -4,7 +4,7 @@ import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Window;
-import edu.purdue.cs.util.SystemUiHider;
+import edu.purdue.cs.util.ui.SystemUiHider;
 
 import android.app.Activity;
 import android.content.Intent;

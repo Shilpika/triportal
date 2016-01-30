@@ -17,4 +17,10 @@
     <string name="action_settings">Settings</string>
 
     <string name="title_activity_splash_screen">SplashScreen</string>
+
+    <!--Startup Screen -->
+    <string name="title_tab_trip">Trip</string>
+    <string name="title_tab_discover">Discover</string>
+    <!--End-->
+
 </resources>
