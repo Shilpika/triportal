@@ -3,12 +3,14 @@ package edu.purdue.cs;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.AsyncTask;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -22,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private GoogleLoginTask mGoogleAuthTask = null;
+    private FacebookLoginTask mFacebookAuthTask = null;
 
     // UI references.
     private View mProgressView;
@@ -38,6 +41,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 attemptGoogleLogin();
+            }
+        });
+        Button mFacebookSignInButton = (Button) findViewById(R.id.facebook_sign_in_button);
+        mFacebookSignInButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptFacebookLogin();
             }
         });
 
@@ -58,6 +68,20 @@ public class LoginActivity extends AppCompatActivity {
         showProgress(true);
         mGoogleAuthTask = new GoogleLoginTask();
         mGoogleAuthTask.execute((Void) null);
+    }
+
+    /**
+     * Attempts to sign in with Facebook.
+     */
+    private void attemptFacebookLogin() {
+        if (mFacebookAuthTask != null) {
+            return;
+        }
+        // Show a progress spinner, and kick off a background task to
+        // perform the user login attempt.
+        showProgress(true);
+        mFacebookAuthTask = new FacebookLoginTask();
+        mFacebookAuthTask.execute((Void) null);
     }
 
     /**
@@ -97,7 +121,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * Authenticate with Google+
+     * Authenticate with Google+.
      */
     public class GoogleLoginTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -114,18 +138,64 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mGoogleAuthTask = null;
-            showProgress(false);
 
             if (success) {
+                // Direct user to the startup page.
+                Intent intent = new Intent(LoginActivity.this, Startup.class);
+                startActivity(intent);
                 finish();
             } else {
+                // Recover the login form
+                showProgress(false);
+
                 // Display some error messages to the user
+                Log.e("Login", "Unknown error happened");
             }
         }
 
         @Override
         protected void onCancelled() {
             mGoogleAuthTask = null;
+            showProgress(false);
+        }
+    }
+
+    /**
+     * Authenticate with Facebook.
+     */
+    public class FacebookLoginTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mFacebookAuthTask = null;
+
+            if (success) {
+                // Direct user to the startup page.
+                Intent intent = new Intent(LoginActivity.this, Startup.class);
+                startActivity(intent);
+                finish();
+            } else {
+                // Recover the login form
+                showProgress(false);
+
+                // Display some error messages to the user
+                Log.e("Login", "Unknown error happened");
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mFacebookAuthTask = null;
             showProgress(false);
         }
     }
