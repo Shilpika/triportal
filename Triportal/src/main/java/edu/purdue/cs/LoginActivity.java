@@ -20,6 +20,8 @@ import android.widget.Button;
  */
 public class LoginActivity extends AppCompatActivity {
 
+    private Class successActivityClass;
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -34,6 +36,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // Get the next activity's class reference.
+        successActivityClass = (Class) getIntent().getSerializableExtra("SUCCESS_ACTIVITY_CLASS");
 
         // Setting up user events.
         Button mGoogleSignInButton = (Button) findViewById(R.id.google_sign_in_button);
@@ -141,7 +146,7 @@ public class LoginActivity extends AppCompatActivity {
 
             if (success) {
                 // Direct user to the startup page.
-                Intent intent = new Intent(LoginActivity.this, Startup.class);
+                Intent intent = new Intent(LoginActivity.this, successActivityClass);
                 startActivity(intent);
                 finish();
             } else {
@@ -181,7 +186,7 @@ public class LoginActivity extends AppCompatActivity {
 
             if (success) {
                 // Direct user to the startup page.
-                Intent intent = new Intent(LoginActivity.this, Startup.class);
+                Intent intent = new Intent(LoginActivity.this, successActivityClass);
                 startActivity(intent);
                 finish();
             } else {

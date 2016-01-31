@@ -11,6 +11,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.parse.Parse;
+import com.parse.ParseAnalytics;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseUser;
 
@@ -23,6 +25,8 @@ import com.parse.ParseUser;
  */
 public class SplashScreen extends Activity {
     private static int SPLASH_TIME_OUT = 1500;
+
+    private final Class startupClass = Startup.class;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,21 +57,16 @@ public class SplashScreen extends Activity {
                 // The intent that the app is going to.
                 Intent intent;
 
-                // Determine whether the current user is an anonymous user
-                if (ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser())) {
-                    // If user is anonymous, send the user to LoginActivity.class
+                ParseUser currentUser = ParseUser.getCurrentUser();
+
+                // Determine whether the current user is logged in
+                if (currentUser == null || ParseAnonymousUtils.isLinked(currentUser)) {
+                    // The user is a guest. Send the user to LoginActivity.class
                     intent = new Intent(SplashScreen.this, LoginActivity.class);
+                    intent.putExtra("SUCCESS_ACTIVITY_CLASS", startupClass);
                 } else {
-                    // If current user is NOT anonymous user
-                    // Get current user data from Parse.com
-                    ParseUser currentUser = ParseUser.getCurrentUser();
-                    if (currentUser != null) {
-                        // Send logged in users to Startup.class
-                        intent = new Intent(SplashScreen.this, Startup.class);
-                    } else {
-                        // Send user to LoginActivity.class
-                        intent = new Intent(SplashScreen.this, LoginActivity.class);
-                    }
+                    // Send logged in users to Startup.class
+                    intent = new Intent(SplashScreen.this, startupClass);
                 }
 
                 // Redirect the user to the new activity.
