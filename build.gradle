@@ -20,4 +20,18 @@ ext {
 
     minSdkVersion = 15
     targetSdkVersion = 23
+
+    androidSupport = 'com.android.support:support-v4:23.1.1'
+    androidAppCompat = 'com.android.support:appcompat-v7:23.1.1'
+    androidDesign = 'com.android.support:design:23.1.1'
+
+    parse = 'com.parse:parse-android:1.13.0'
+    parseBolts = 'com.parse.bolts:bolts-tasks:1.4.0'
+    parseFacebookUtils = 'com.parse:parsefacebookutils-v4-android:1.10.4@aar'
+    parseTwitterUtils = 'com.parse:parsetwitterutils-android:1.10.5'
+
+    parseUiLogin = 'com.parse:parseui-login-android:0.0.1'
+    parseUiWidget = 'com.parse:parseui-widget-android:0.0.1'
+
+    facebookSDK = 'com.facebook.android:facebook-android-sdk:4.9.0'
 }
