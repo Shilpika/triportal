@@ -30,8 +30,5 @@ ext {
     parseFacebookUtils = 'com.parse:parsefacebookutils-v4-android:1.10.4@aar'
     parseTwitterUtils = 'com.parse:parsetwitterutils-android:1.10.5'
 
-    parseUiLogin = 'com.parse:parseui-login-android:0.0.1'
-    parseUiWidget = 'com.parse:parseui-widget-android:0.0.1'
-
     facebookSDK = 'com.facebook.android:facebook-android-sdk:4.9.0'
 }
