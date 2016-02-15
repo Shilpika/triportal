@@ -32,4 +32,4 @@ the application will generate the total time and suggested route for you.
 * [Project Charpter](https://docs.google.com/document/d/1SsHvgLASRSHLI29AF5xqcd_Y-9q9eHpACpziut4Q3R8/pub)
 * [Product Backlog](https://docs.google.com/document/d/1EiDIPek90S2pl-K-TotOuw324NF-rRds8CfG7OUqFJs/pub)
 * [Design Document](https://docs.google.com/document/d/18yZlwUaeoMPn99Lq6NC-UQcrPATGLHgo1pjaGDlRzms/pub)
-* [Sprint 1 Plan](https://docs.google.com/document/d/1FViPoCwPPtaWdftvIAbtpP1EU4Oyxx9mIQQN7VVpAGs/pub)
+* [Sprint 1 Plan](https://docs.google.com/document/d/18xe1fZkIpLhaOKXO3ddsE3IUFaHe9vx4ZDFWYho4PCk/pub)
