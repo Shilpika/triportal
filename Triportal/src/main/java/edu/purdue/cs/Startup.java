@@ -28,7 +28,9 @@ public class Startup extends AppCompatActivity {
     setSupportActionBar(actionbar);
     getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-    //TODO: Turn this into ViewPage, The contents will be in tabs
+
+
+            //TODO: Turn this into ViewPage, The contents will be in tabs
 
   }
 

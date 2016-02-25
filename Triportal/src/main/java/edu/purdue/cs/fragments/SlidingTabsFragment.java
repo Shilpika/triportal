@@ -18,6 +18,7 @@ package edu.purdue.cs.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -25,6 +26,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import edu.purdue.cs.util.template.TabFragment;
 import edu.purdue.cs.util.view.SlidingTabLayout;
 import edu.purdue.cs.R;
 
@@ -35,12 +37,12 @@ public class SlidingTabsFragment extends Fragment {
 
 
     static class PagerItem {
+        private final TabFragment mfragment;
         private final CharSequence mTitle;
-        private final Fragment mfragment;
 
-        PagerItem(CharSequence title, Fragment fragment) {
-            mTitle = title;
+        PagerItem(CharSequence title,TabFragment fragment) {
             mfragment = fragment;
+            mTitle = title;
         }
 
 
@@ -72,18 +74,17 @@ public class SlidingTabsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mTabs.add(new PagerItem(
-                getString(R.string.title_tab_trip), // Title
+                getString(R.string.title_tab_trip),
                 new TripTabFragment()
         ));
 
         //TODO: Add discover fragment to Pager
 
-        mTabs.add(new PagerItem(
-                getString(R.string.title_tab_discover), // Title
-                null
-        ));
+//        mTabs.add(new PagerItem(
+//                getString(R.string.title_tab_discover), // Title
+//                null
+//        ));
 
     }
 
@@ -94,7 +95,7 @@ public class SlidingTabsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_startup, container, false);
+        return inflater.inflate(R.layout.activity_startup_fragment, container, false);
     }
 
     // BEGIN_INCLUDE (fragment_onviewcreated)

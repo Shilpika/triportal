@@ -48,4 +48,5 @@ public class TripTabFragment extends TabFragment {
             //TODO: arguments to be implement
         }
     }
+
 }
