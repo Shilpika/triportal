@@ -1,15 +1,15 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
+
+version = "0.0.1"
+group = 'com.parse'
 
 dependencies {
     compile rootProject.ext.androidSupport
-    compile rootProject.ext.androidAppCompat
-    compile rootProject.ext.androidDesign
     compile rootProject.ext.parse
-    compile rootProject.ext.parseBolts
-    compile rootProject.ext.parseFacebookUtils
-    compile rootProject.ext.parseTwitterUtils
-    compile rootProject.ext.facebookSDK
-    compile project(':ParseUI-Login')
+
+    provided rootProject.ext.facebookSDK
+    provided rootProject.ext.parseFacebookUtils
+    provided rootProject.ext.parseTwitterUtils
 }
 
 android {
@@ -17,18 +17,11 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        applicationId "edu.purdue.cs.triportal"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        multiDexEnabled true
+        versionName project.version
+        versionCode 1
     }
-
-    dexOptions {
-        incremental true
-        javaMaxHeapSize "2048M"
-        jumboMode = true
-    }
-
     buildTypes {
         release {
             minifyEnabled false
