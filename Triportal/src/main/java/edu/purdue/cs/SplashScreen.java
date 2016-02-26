@@ -19,19 +19,19 @@ import android.os.Handler;
  * @see SystemUiHider
  */
 public class SplashScreen extends Activity {
-    private static int SPLASH_TIME_OUT = 1500;
+            private static int SPLASH_TIME_OUT = 1500;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash_screen);
-        final Window window = getWindow();
-        final int originalBarColor;
-        //this might be redundant
-        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            originalBarColor = window.getNavigationBarColor();
-            window.setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.app_theme));
-        } else {
+            @Override
+            protected void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+                setContentView(R.layout.activity_splash_screen);
+                final Window window = getWindow();
+                final int originalBarColor;
+                //this might be redundant
+                if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    originalBarColor = window.getNavigationBarColor();
+                    window.setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.app_theme));
+                } else {
             originalBarColor =  0;
         }
         Log.d("Splash", "Color" + originalBarColor);

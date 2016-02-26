@@ -78,6 +78,10 @@ public class SlidingTabsFragment extends Fragment {
                 getString(R.string.title_tab_trip),
                 new TripTabFragment()
         ));
+        mTabs.add(new PagerItem(
+                getString(R.string.title_tab_discover),
+                new TripTabFragment()
+        ));
 
         //TODO: Add discover fragment to Pager
 

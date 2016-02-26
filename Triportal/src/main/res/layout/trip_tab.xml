@@ -3,14 +3,10 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-            android:background="@color/com_facebook_blue">
+            android:background="@color/light_grey">
 
     <!-- color and text for testing purpose only -->
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:text="This is Trip Tab"/>
     <!-- end -->
     <ListView
         android:id="@+id/trip_list"
