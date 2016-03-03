@@ -1,6 +1,6 @@
 package edu.purdue.cs;
 
-import edu.purdue.cs.util.SystemUiHider;
+import edu.purdue.cs.util.ui.SystemUiHider;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;

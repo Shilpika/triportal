@@ -1,4 +1,4 @@
-package edu.purdue.cs.util;
+package edu.purdue.cs.util.ui;
 
 import android.app.Activity;
 import android.os.Build;

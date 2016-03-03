@@ -1,10 +1,6 @@
 package edu.purdue.cs;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -24,7 +20,9 @@ public class Startup extends AppCompatActivity {
     setSupportActionBar(actionbar);
     getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-    //TODO: Turn this into ViewPage, The contents will be in tabs
+
+
+            //TODO: Turn this into ViewPage, The contents will be in tabs
 
   }
 
@@ -50,33 +48,5 @@ public class Startup extends AppCompatActivity {
     return super.onOptionsItemSelected(item);
   }
 
-
-  public static class AppSectionsPagerAdapter extends FragmentPagerAdapter {
-    public AppSectionsPagerAdapter(FragmentManager fm) {
-      super(fm);
-    }
-
-    @Override
-    public Fragment getItem(int i) {
-      switch (i) {
-        case 0:
-          //TODO
-          return null;
-
-        default:
-          return null;
-      }
-    }
-
-    @Override
-    public int getCount() {
-      return 2; //number of tabs will be added
-    }
-
-    @Override
-    public CharSequence getPageTitle(int position) {
-      return "Section " + (position + 1);
-    }
-  }
 }
 

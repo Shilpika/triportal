@@ -5,4 +5,8 @@
     <color name="app_theme">#87bf61</color>
     <color name="app_theme_dark">#5F8049</color>
 
+    <color name="light_grey">#f0f0f0</color>
+    <color name="super_light_grey">#f6f6f6</color>
+    <color name="white">#ffffff</color>
+
 </resources>
