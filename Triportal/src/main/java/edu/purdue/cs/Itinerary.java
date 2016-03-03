@@ -2,6 +2,8 @@ package edu.purdue.cs;
 
 import com.parse.*;
 
+import java.util.List;
+
 @ParseClassName("Itinerary")
 public class Itinerary extends ParseObject {
     public Itinerary() {
@@ -18,5 +20,9 @@ public class Itinerary extends ParseObject {
 
     public Integer getNumberOfDays() {
         return getInt("numberOfDays");
+    }
+
+    public List<Day> getDays(){
+        return null;
     }
 }
