@@ -28,7 +28,7 @@
             android:layout_weight="1"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:text="BUTTON 1"
+            android:text="@string/trip_tab_list_item_view_btn"
             android:textSize="12sp"
             android:textStyle="normal" />
         <Button
@@ -40,7 +40,7 @@
             android:layout_weight="1"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:text="BUTTON 2"
+            android:text="@string/trip_tab_list_item_delete_btn"
             android:textSize="12sp"
             android:textStyle="normal" />
     </LinearLayout>

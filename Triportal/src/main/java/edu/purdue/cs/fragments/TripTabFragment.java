@@ -83,9 +83,11 @@ public class TripTabFragment extends TabFragment {
         public void onClick(View v) {
             for (int i = tripList.getFirstVisiblePosition(); i <= tripList.getLastVisiblePosition(); i++) {
                 if (v == tripList.getChildAt(i - tripList.getFirstVisiblePosition()).findViewById(R.id.list_item_card_button_1)) {
+                    //View itnernary, transit to the next activity
                     // PERFORM AN ACTION WITH THE ITEM AT POSITION i
                   //  Toast.makeText(getActivity(), "Clicked on Left Action Button of List Item " + i, Toast.LENGTH_SHORT).show();
                 } else if (v == tripList.getChildAt(i - tripList.getFirstVisiblePosition()).findViewById(R.id.list_item_card_button_2)) {
+                    //Delete Itnerary, delete on server
                     // PERFORM ANOTHER ACTION WITH THE ITEM AT POSITION i
                    // Toast.makeText(getActivity(), "Clicked on Right Action Button of List Item " + i, Toast.LENGTH_SHORT).show();
                 }
