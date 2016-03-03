@@ -1,5 +1,7 @@
 # Triportal
 
+[![Join the chat at https://gitter.im/triportal/triportal](https://badges.gitter.im/triportal/triportal.svg)](https://gitter.im/triportal/triportal?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 > Trip planner right inside your pocket.
 
 Preparing for a trip always costs a great amount of time, it is always inconvenient to search for
@@ -24,3 +26,10 @@ the application will generate the total time and suggested route for you.
 * You can comment on other’s plans.
 * Web application that has the same functions as the mobile application.
 * Divide plans to several parts so that you can choose the parts you like and add them to own plans.
+
+## Documentations
+
+* [Project Charpter](https://docs.google.com/document/d/1SsHvgLASRSHLI29AF5xqcd_Y-9q9eHpACpziut4Q3R8/pub)
+* [Product Backlog](https://docs.google.com/document/d/1EiDIPek90S2pl-K-TotOuw324NF-rRds8CfG7OUqFJs/pub)
+* [Design Document](https://docs.google.com/document/d/18yZlwUaeoMPn99Lq6NC-UQcrPATGLHgo1pjaGDlRzms/pub)
+* [Sprint 1 Plan](https://docs.google.com/document/d/18xe1fZkIpLhaOKXO3ddsE3IUFaHe9vx4ZDFWYho4PCk/pub)

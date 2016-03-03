@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) 2015-present, Parse, LLC.
-  ~ All rights reserved.
-  ~
-  ~ This source code is licensed under the BSD-style license found in the
-  ~ LICENSE file in the root directory of this source tree. An additional grant
-  ~ of patent rights can be found in the PATENTS file in the same directory.
-  -->
 <resources>
+    <!-- Application Keys -->
     <string name="parse_app_id">nvNbDRRm3lmBFq7n46g32MRZKmADJGyyzjdSbQrT</string>
     <string name="parse_client_key">vQj3W5b0seexrLf5f6yjOicjHc4TLi2zVmZrhasC</string>
+    <string name="facebook_app_id">1685725281708433</string>
+    <string name="twitter_consumer_key">cQWd5xkD1IEvqxV2GllwnXTRe</string>
+    <string name="twitter_consumer_secret">NsD9YJVuqaRkJK7zcUN4nyriblVPK9YZbstIHeOBZgY8yvRZXL</string>
 
     <string name="app_name">Triportal</string>
 
@@ -27,4 +23,9 @@
     <string name="trip_tab_list_item_delete_btn">Delete</string>
     <!--End-->
 
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="action_sign_in_with_google">Sign in with Google+</string>
+    <string name="action_sign_in_with_facebook">Sign in with Facebook</string>
 </resources>
