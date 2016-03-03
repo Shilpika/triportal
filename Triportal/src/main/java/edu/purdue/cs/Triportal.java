@@ -5,6 +5,7 @@ import android.app.Application;
 import com.parse.Parse;
 import com.parse.ParseACL;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseObject;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
 
@@ -36,6 +37,10 @@ public class Triportal extends Application {
         // Initialize ParseTwitter support.
         ParseTwitterUtils.initialize(getString(R.string.twitter_consumer_key),
                 getString(R.string.twitter_consumer_secret));
+
+        ParseObject.registerSubclass(Itinerary.class);
+        ParseObject.registerSubclass(Poi.class);
+        ParseObject.registerSubclass(Day.class);
     }
 
     @Override
