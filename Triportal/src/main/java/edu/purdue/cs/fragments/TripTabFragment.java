@@ -23,6 +23,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.*;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import edu.purdue.cs.Itinerary;
 import edu.purdue.cs.util.template.TabFragment;
 
 import edu.purdue.cs.R;
@@ -38,6 +41,7 @@ public class TripTabFragment extends TabFragment {
      */
 
     private ListView tripList;
+    private List<Itinerary> itineraryList;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -66,16 +70,37 @@ public class TripTabFragment extends TabFragment {
     private void setupList() {
         tripList.setAdapter(createAdapter());
         tripList.setOnItemClickListener(new ListItemClickListener());
+        Itinerary.getMyItineraryList(new FindCallback<Itinerary>() {
+            @Override
+            public void done(List<Itinerary> objects, ParseException e) {
+                itineraryList = objects;
+            }
+        });
+    }
+
+    private void refreshList() {
+        Itinerary.getMyItineraryList(new FindCallback<Itinerary>() {
+            @Override
+            public void done(List<Itinerary> objects, ParseException e) {
+                itineraryList = objects;
+            }
+        });
+        TripListAdapter adapter = (TripListAdapter) tripList.getAdapter();
+        adapter.updateList(itineraryList);
+
     }
 
     private TripListAdapter createAdapter() {
         ArrayList<String> items = new ArrayList<String>();
 
-        for (int i = 0; i < 100; i++) {
-            items.add(i, "Image for List Item " + i);
+//        for (int i = 0; i < 100; i++) {
+//            items.add(i, "Image for List Item " + i);
+//        }
+        for(Itinerary i : itineraryList) {
+            items.add(i.getTitle());
         }
 
-        return new TripListAdapter(getActivity(), items, new ListItemButtonClickListener());
+        return new TripListAdapter(getActivity(), items,itineraryList, new ListItemButtonClickListener());
     }
 
     private final class ListItemButtonClickListener implements View.OnClickListener {
@@ -108,24 +133,36 @@ public class TripTabFragment extends TabFragment {
 }
 
 class TripListAdapter extends BaseAdapter {
-    private List<String> items;
+    private List<String> titleList;
+    private List<Itinerary> itineraryList;
+
     private final View.OnClickListener itemClickListener;
     private final Context context;
 
-    public TripListAdapter(Context context, List<String> items, View.OnClickListener itemClickListener) {
+    public TripListAdapter(Context context, List<String> items,List<Itinerary> itineraryList, View.OnClickListener itemClickListener) {
         this.context = context;
-        this.items = items;
+        this.titleList = items;
+        this.itineraryList = itineraryList;
         this.itemClickListener = itemClickListener;
+    }
+
+    public List<String> updateList(List<Itinerary> list) {
+        ArrayList<String> newList = new ArrayList<>();
+        for(Itinerary i : list) {
+            newList.add(i.getTitle());
+        }
+        titleList = newList;
+        return titleList;
     }
 
     @Override
     public String getItem(int position) {
-        return items.get(position);
+        return titleList.get(position);
     }
 
     @Override
     public int getCount() {
-        return items.size();
+        return titleList.size();
     }
 
     @Override
@@ -151,7 +188,7 @@ class TripListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.itemText.setText(items.get(position));
+        holder.itemText.setText(titleList.get(position));
 
         if (itemClickListener != null) {
             holder.itemButton1.setOnClickListener(itemClickListener);
