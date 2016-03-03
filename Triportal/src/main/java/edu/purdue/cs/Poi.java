@@ -2,7 +2,7 @@ package edu.purdue.cs;
 
 import com.parse.*;
 
-@ParseClassName("Instrument")
+@ParseClassName("Poi")
 public class Poi extends ParseObject {
     public Poi() {
         super();
@@ -16,19 +16,15 @@ public class Poi extends ParseObject {
         return getString("description");
     }
 
-    public Integer getRating() {
-        return getInt("rating");
+    public Double getRating() {
+        return getDouble("rating");
     }
 
-    public String getImageUrl() {
-        return getString("image");
+    public ParseFile getImage() {
+        return getParseFile("image");
     }
 
-    public Double getLatitude() {
-        return getDouble("latitude");
-    }
-
-    public Double getLongitude() {
-        return getDouble("longitude");
+    public ParseGeoPoint getLocation() {
+        return getParseGeoPoint("location");
     }
 }
