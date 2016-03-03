@@ -14,7 +14,7 @@ import com.parse.Parse;
 import com.parse.ParseACL;
 import com.parse.ParseUser;
 import android.content.Context;
-import android.support.multidex.MultiDex;
+import android.support.multidex.*;
 
 
 public class Triportal extends Application {
