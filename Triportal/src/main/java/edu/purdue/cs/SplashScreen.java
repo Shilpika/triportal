@@ -1,5 +1,6 @@
 package edu.purdue.cs;
 
+import android.util.Log;
 import edu.purdue.cs.util.ui.SystemUiHider;
 import android.app.Activity;
 import android.content.Intent;
@@ -34,6 +35,7 @@ public class SplashScreen extends Activity {
 
         if (currentUser != null) {
             // The user is logged in. Direct to the startup activity.
+            Log.d("USER ID",currentUser.getUsername());
             Intent intent = new Intent(SplashScreen.this, Startup.class);
             startActivity(intent);
             finish();

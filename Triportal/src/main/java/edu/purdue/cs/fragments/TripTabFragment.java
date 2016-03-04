@@ -17,15 +17,23 @@
 package edu.purdue.cs.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.*;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import edu.purdue.cs.CreateItineraryView;
+import edu.purdue.cs.Itinerary;
+import edu.purdue.cs.Startup;
 import edu.purdue.cs.util.template.TabFragment;
 
 import edu.purdue.cs.R;
+import edu.purdue.cs.util.view.SlidingTabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,18 +46,51 @@ public class TripTabFragment extends TabFragment {
      */
 
     private ListView tripList;
+    private ImageButton createButton;
+    private List<Itinerary> itineraryList;
+    private Context pContext;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView =  inflater.inflate(R.layout.trip_tab, container, false);
         //inflating the card-style list
         tripList = (ListView) rootView.findViewById(R.id.trip_list);
+        createButton = (ImageButton) rootView.findViewById(R.id.trip_tab_create_i_btn);
         setupList();
+        setupButton();
+
+
 
         return rootView;
 
     }
 
+    public void setupButton() {
+
+        /**
+         * set up create button(s), this could be from various tabs, currently only from the trip tab
+         */
+
+        createButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //Link crate button to the CreateItineraryView
+                Intent i = new Intent(getActivity(),CreateItineraryView.class);
+                getActivity().startActivity(i);
+               // getActivity().finish();
+            }
+        });
+    }
+
+
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        refreshList();
+    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -64,19 +105,48 @@ public class TripTabFragment extends TabFragment {
     }
 
     private void setupList() {
+        Itinerary.getMyItineraryList(new FindCallback<Itinerary>() {
+            @Override
+            public void done(List<Itinerary> objects, ParseException e) {
+                itineraryList = objects;
+            }
+        });
+       // assert(itineraryList.size() != 0);
         tripList.setAdapter(createAdapter());
         tripList.setOnItemClickListener(new ListItemClickListener());
+
+    }
+
+    private void refreshList() {
+        Itinerary.getMyItineraryList(new FindCallback<Itinerary>() {
+            @Override
+            public void done(List<Itinerary> objects, ParseException e) {
+                itineraryList = objects;
+                TripListAdapter adapter = (TripListAdapter) tripList.getAdapter();
+                adapter.updateList(itineraryList);
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private TripListAdapter createAdapter() {
         ArrayList<String> items = new ArrayList<String>();
 
-        for (int i = 0; i < 100; i++) {
-            items.add(i, "Image for List Item " + i);
+//        for (int i = 0; i < 100; i++) {
+//            items.add(i, "Image for List Item " + i);
+//        }
+        if(itineraryList != null) {
+            for (Itinerary i : itineraryList) {
+                items.add(i.getTitle());
+            }
+        } else {
+            items.add("No item in list");
         }
 
-        return new TripListAdapter(getActivity(), items, new ListItemButtonClickListener());
+        return new TripListAdapter(getActivity(), items,itineraryList, new ListItemButtonClickListener());
     }
+
+
 
     private final class ListItemButtonClickListener implements View.OnClickListener {
         @Override
@@ -108,24 +178,36 @@ public class TripTabFragment extends TabFragment {
 }
 
 class TripListAdapter extends BaseAdapter {
-    private List<String> items;
+    private List<String> titleList;
+    private List<Itinerary> itineraryList;
+
     private final View.OnClickListener itemClickListener;
     private final Context context;
 
-    public TripListAdapter(Context context, List<String> items, View.OnClickListener itemClickListener) {
+    public TripListAdapter(Context context, List<String> items,List<Itinerary> itineraryList, View.OnClickListener itemClickListener) {
         this.context = context;
-        this.items = items;
+        this.titleList = items;
+        this.itineraryList = itineraryList;
         this.itemClickListener = itemClickListener;
+    }
+
+    public List<String> updateList(List<Itinerary> list) {
+        ArrayList<String> newList = new ArrayList<>();
+        for(Itinerary i : list) {
+            newList.add(i.getTitle());
+        }
+        titleList = newList;
+        return titleList;
     }
 
     @Override
     public String getItem(int position) {
-        return items.get(position);
+        return titleList.get(position);
     }
 
     @Override
     public int getCount() {
-        return items.size();
+        return titleList.size();
     }
 
     @Override
@@ -151,7 +233,7 @@ class TripListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.itemText.setText(items.get(position));
+        holder.itemText.setText(titleList.get(position));
 
         if (itemClickListener != null) {
             holder.itemButton1.setOnClickListener(itemClickListener);

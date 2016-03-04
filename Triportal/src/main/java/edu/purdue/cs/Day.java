@@ -14,7 +14,13 @@ public class Day extends ParseObject {
         return getInt("dayIndex");
     }
 
-    public List<Poi> getPoiList() {
-        return getList("poiList");
+    public void getPoiListInBackground(FindCallback<Poi> callback) {
+        List<Poi> poiList = getList("poiList");
+        ParseObject.fetchAllIfNeededInBackground(poiList, callback);
+    }
+
+    public List<Poi> getPoiList() throws ParseException {
+        List<Poi> poiList = getList("poiList");
+        return ParseObject.fetchAll(poiList);
     }
 }
