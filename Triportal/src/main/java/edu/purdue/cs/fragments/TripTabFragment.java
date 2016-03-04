@@ -27,12 +27,9 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import edu.purdue.cs.CreateItineraryView;
-import edu.purdue.cs.Itinerary;
-import edu.purdue.cs.Startup;
+import edu.purdue.cs.*;
 import edu.purdue.cs.util.template.TabFragment;
 
-import edu.purdue.cs.R;
 import edu.purdue.cs.util.view.SlidingTabLayout;
 
 import java.util.ArrayList;
@@ -129,6 +126,17 @@ public class TripTabFragment extends TabFragment {
         });
     }
 
+    private void viewListItem(int index) {
+        // this should be working since the order of the List View is base on the ItneraryList we fetch from server
+        Itinerary itinerary = itineraryList.get(index);
+        // make sure this itinerary is pin in local storage
+        itinerary.pinInBackground();
+        Intent intent = new Intent(getActivity(), DayListView.class);
+        intent.putExtra("it_ID",itinerary.getObjectId());
+        getActivity().startActivity(intent);
+
+    }
+
     private TripListAdapter createAdapter() {
         ArrayList<String> items = new ArrayList<String>();
 
@@ -154,6 +162,7 @@ public class TripTabFragment extends TabFragment {
             for (int i = tripList.getFirstVisiblePosition(); i <= tripList.getLastVisiblePosition(); i++) {
                 if (v == tripList.getChildAt(i - tripList.getFirstVisiblePosition()).findViewById(R.id.list_item_card_button_1)) {
                     //View itnernary, transit to the next activity
+                    TripTabFragment.this.viewListItem(i);
                     // PERFORM AN ACTION WITH THE ITEM AT POSITION i
                   //  Toast.makeText(getActivity(), "Clicked on Left Action Button of List Item " + i, Toast.LENGTH_SHORT).show();
                 } else if (v == tripList.getChildAt(i - tripList.getFirstVisiblePosition()).findViewById(R.id.list_item_card_button_2)) {

@@ -38,7 +38,7 @@ public class DayListView extends Activity{
         //View rootView =  inflater.inflate(R.layout.trip_tab, container, false);
         toolbar = (Toolbar) findViewById(R.id.dayListViewActionBar);
         poilist = (ListView) findViewById(R.id.day_list);
-        String itneraryID = getIntent().getExtras().getString("itinerary");
+        String itneraryID = getIntent().getExtras().getString("it_ID");
 
         Log.d("DayListView It Id", itneraryID);
 
