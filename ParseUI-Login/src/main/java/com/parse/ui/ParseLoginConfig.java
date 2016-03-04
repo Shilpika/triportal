@@ -53,6 +53,9 @@ public class ParseLoginConfig {
   public static final String FACEBOOK_LOGIN_PERMISSIONS = "com.parse.ui.ParseLoginActivity.FACEBOOK_LOGIN_PERMISSIONS";
   public static final String TWITTER_LOGIN_ENABLED = "com.parse.ui.ParseLoginActivity.TWITTER_LOGIN_ENABLED";
   public static final String TWITTER_LOGIN_BUTTON_TEXT = "com.parse.ui.ParseLoginActivity.TWITTER_LOGIN_BUTTON_TEXT";
+  public static final String USE_DEFAULT_CREDENTIALS = "com.parse.ui.ParseLoginActivity.USE_DEFAULT_CREDENTIALS";
+  public static final String DEFAULT_EMAIL = "com.parse.ui.ParseLoginActivity.DEFAULT_EMAIL";
+  public static final String DEFAULT_PASSWORD = "com.parse.ui.ParseLoginActivity.DEFAULT_PASSWORD";
 
   // For internally serializing to/from string array (the public analog above is for resource from activity meta-data).
   private static final String FACEBOOK_LOGIN_PERMISSIONS_STRING_ARRAY = "com.parse.ui.ParseLoginActivity.FACEBOOK_LOGIN_PERMISSIONS_STRING_ARRAY";
@@ -76,6 +79,10 @@ public class ParseLoginConfig {
   private Boolean facebookLoginEnabled;
   private CharSequence facebookLoginButtonText;
   private Collection<String> facebookLoginPermissions;
+
+  private CharSequence defaultEmail;
+  private CharSequence defaultPassword;
+  private boolean useDefaultCredentials;
 
   private Boolean twitterLoginEnabled;
   private CharSequence twitterLoginButtonText;
@@ -238,6 +245,30 @@ public class ParseLoginConfig {
     this.twitterLoginButtonText = twitterLoginButtonText;
   }
 
+  public boolean isUsingDefaultCredentials() {
+    return this.useDefaultCredentials;
+  }
+
+  public CharSequence getDefaultEmail() {
+    return this.defaultEmail;
+  }
+
+  public CharSequence getDefaultPassword() {
+    return this.defaultPassword;
+  }
+
+  public void setDefaultEmail(CharSequence defaultEmail) {
+    this.defaultEmail = defaultEmail;
+  }
+
+  public void setDefaultPassword(CharSequence defaultPassword) {
+    this.defaultPassword = defaultPassword;
+  }
+
+  public void setUseDefaultCredentials(boolean useDefaultCredentials) {
+    this.useDefaultCredentials = useDefaultCredentials;
+  }
+
   /**
    * Converts this object into a Bundle object. For options that are not
    * explicitly set, we do not include them in the Bundle so that this bundle
@@ -302,6 +333,14 @@ public class ParseLoginConfig {
     }
     if (twitterLoginButtonText != null) {
       bundle.putCharSequence(TWITTER_LOGIN_BUTTON_TEXT, twitterLoginButtonText);
+    }
+
+    if (useDefaultCredentials) {
+      bundle.putBoolean(USE_DEFAULT_CREDENTIALS, useDefaultCredentials);
+      bundle.putCharSequence(DEFAULT_EMAIL, defaultEmail);
+      bundle.putCharSequence(DEFAULT_PASSWORD, defaultPassword);
+    } else {
+      bundle.putBoolean(USE_DEFAULT_CREDENTIALS, useDefaultCredentials);
     }
 
     return bundle;
@@ -387,6 +426,13 @@ public class ParseLoginConfig {
     if (keys.contains(TWITTER_LOGIN_BUTTON_TEXT)) {
       config.setTwitterLoginButtonText(bundle
           .getCharSequence(TWITTER_LOGIN_BUTTON_TEXT));
+    }
+    if (keys.contains(USE_DEFAULT_CREDENTIALS)) {
+      if ( bundle.getBoolean(USE_DEFAULT_CREDENTIALS) ) {
+        config.setUseDefaultCredentials(true);
+        config.setDefaultEmail(bundle.getCharSequence(DEFAULT_EMAIL));
+        config.setDefaultPassword(bundle.getCharSequence(DEFAULT_PASSWORD));
+      }
     }
 
     return config;

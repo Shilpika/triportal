@@ -311,6 +311,13 @@ public class ParseLoginBuilder {
     return this;
   }
 
+  public ParseLoginBuilder useDefaultCredentials(CharSequence defaultEmail, CharSequence defaultPassword) {
+    config.setUseDefaultCredentials(true);
+    config.setDefaultEmail(defaultEmail);
+    config.setDefaultPassword(defaultPassword);
+    return this;
+  }
+
   /**
    * Construct an intent that can be used to start ParseLoginActivity with the
    * specified customizations.

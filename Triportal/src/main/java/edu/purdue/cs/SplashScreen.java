@@ -43,6 +43,7 @@ public class SplashScreen extends Activity {
             // The user is not logged in. Direct to ParseLogin activity.
             ParseLoginBuilder loginBuilder = new ParseLoginBuilder(
                     SplashScreen.this);
+            loginBuilder.useDefaultCredentials("bxd@cs.purdue.edu", "dunsmore");
             startActivityForResult(loginBuilder.build(), LOGIN_REQUEST);
         }
     }
