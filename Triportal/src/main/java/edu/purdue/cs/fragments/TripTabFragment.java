@@ -19,7 +19,6 @@ package edu.purdue.cs.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,9 +30,10 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import edu.purdue.cs.*;
 import edu.purdue.cs.util.template.TabFragment;
+import org.w3c.dom.Text;
 
-import edu.purdue.cs.util.view.SlidingTabLayout;
-
+import java.lang.reflect.Array;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -156,20 +156,32 @@ public class TripTabFragment extends TabFragment {
     }
 
     private TripListAdapter createAdapter() {
-        ArrayList<String> items = new ArrayList<String>();
+        ArrayList<List> list = new ArrayList<>(3);
+        ArrayList<String> titles = new ArrayList<String>();
+        ArrayList<String> days = new ArrayList<>();
+        ArrayList<String> dates = new ArrayList<>();
 
-//        for (int i = 0; i < 100; i++) {
-//            items.add(i, "Image for List Item " + i);
-//        }
+        DateFormat dateFormat = DateFormat.getDateInstance();
+
         if(itineraryList != null) {
             for (Itinerary i : itineraryList) {
-                items.add(i.getTitle());
+                titles.add(i.getTitle());
+                days.add(i.getNumberOfDays()+"D");
+                dates.add(dateFormat.format(i.getStartDate()));
+
             }
         } else {
-            items.add("No item in list");
+            titles.add("No item in list");
+            days.add("");
+            dates.add("");
         }
 
-        return new TripListAdapter(getActivity(), items,itineraryList, new ListItemButtonClickListener());
+        list.add(titles);
+        list.add(days);
+        list.add(dates);
+
+
+        return new TripListAdapter(getActivity(), list,itineraryList, new ListItemButtonClickListener());
     }
 
 
@@ -211,24 +223,37 @@ public class TripTabFragment extends TabFragment {
 
 class TripListAdapter extends BaseAdapter {
     private List<String> titleList;
+    private List<String> dateList;
+    private List<String> daysList;
     private List<Itinerary> itineraryList;
+
 
     private final View.OnClickListener itemClickListener;
     private final Context context;
 
-    public TripListAdapter(Context context, List<String> items,List<Itinerary> itineraryList, View.OnClickListener itemClickListener) {
+    public TripListAdapter(Context context, List<List> lists,List<Itinerary> itineraryList, View.OnClickListener itemClickListener) {
         this.context = context;
-        this.titleList = items;
+        this.titleList = lists.get(0);
+        this.daysList = lists.get(1);
+        this.dateList = lists.get(2);
         this.itineraryList = itineraryList;
         this.itemClickListener = itemClickListener;
     }
 
     public List<String> updateList(List<Itinerary> list) {
-        ArrayList<String> newList = new ArrayList<>();
+        ArrayList<String> titles = new ArrayList<String>();
+        ArrayList<String> days = new ArrayList<>();
+        ArrayList<String> dates = new ArrayList<>();
+        DateFormat dateFormat = DateFormat.getDateInstance();
         for(Itinerary i : list) {
-            newList.add(i.getTitle());
+            titles.add(i.getTitle());
+            days.add(i.getNumberOfDays()+"D");
+            dates.add(dateFormat.format(i.getStartDate()));
         }
-        titleList = newList;
+        titleList = titles;
+        daysList = days;
+        dateList = dates;
+        itineraryList = list;
         return titleList;
     }
 
@@ -256,16 +281,20 @@ class TripListAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.trip_tab_list_item, null);
 
             holder = new ViewHolder();
-            holder.itemText = (TextView) convertView.findViewById(R.id.trip_tab_list_item_text);
+            holder.itemTitle = (TextView) convertView.findViewById(R.id.trip_tab_list_item_title);
             holder.itemButton1 = (Button) convertView.findViewById(R.id.list_item_card_button_1);
             holder.itemButton2 = (Button) convertView.findViewById(R.id.list_item_card_button_2);
+            holder.itemDate = (TextView) convertView.findViewById(R.id.trip_tab_list_item_date);
+            holder.itemDays = (TextView) convertView.findViewById(R.id.trip_tab_list_item_days);
             convertView.setTag(holder);
 
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.itemText.setText(titleList.get(position));
+        holder.itemTitle.setText(titleList.get(position));
+        holder.itemDate.setText(dateList.get(position));
+        holder.itemDays.setText(daysList.get(position));
 
         if (itemClickListener != null) {
             holder.itemButton1.setOnClickListener(itemClickListener);
@@ -276,7 +305,9 @@ class TripListAdapter extends BaseAdapter {
     }
 
     private static class ViewHolder {
-        private TextView itemText;
+        private TextView itemTitle;
+        private TextView itemDays;
+        private TextView itemDate;
         private Button itemButton1;
         private Button itemButton2;
     }
