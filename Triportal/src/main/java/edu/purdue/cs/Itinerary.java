@@ -2,6 +2,7 @@ package edu.purdue.cs;
 
 import com.parse.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -39,6 +40,18 @@ public class Itinerary extends ParseObject {
         return getString("title");
     }
 
+    public void setTitle(String title) {
+        put("title", title);
+    }
+
+    public Date getStartDate() {
+        return getDate("startDate");
+    }
+
+    public void setStartDate(Date startDate) {
+        put("startDate", startDate);
+    }
+
     public ParseUser getOwner() {
         return getParseUser("owner");
     }
@@ -49,6 +62,14 @@ public class Itinerary extends ParseObject {
 
     public Integer getNumberOfDays() {
         return getInt("numberOfDays");
+    }
+
+    public void increaseNumberOfDays(int days) {
+        increment("numberOfDays", days);
+    }
+
+    public void increaseNumberOfDays() {
+        increment("numberOfDays");
     }
 
     public void getDaysInBackground(FindCallback<Day> callback) {
