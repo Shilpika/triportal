@@ -34,6 +34,7 @@ public class Itinerary extends ParseObject {
 
     public Itinerary() {
         super();
+        setOwner(ParseUser.getCurrentUser());
     }
 
     public String getTitle() {
