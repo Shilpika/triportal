@@ -105,7 +105,7 @@ public class TripTabFragment extends TabFragment {
     }
 
     private void setupList() {
-        Itinerary.getMyItineraryList(new FindCallback<Itinerary>() {
+        Itinerary.getMyItineraryListInBackground(new FindCallback<Itinerary>() {
             @Override
             public void done(List<Itinerary> objects, ParseException e) {
                 itineraryList = objects;
@@ -118,7 +118,7 @@ public class TripTabFragment extends TabFragment {
     }
 
     private void refreshList() {
-        Itinerary.getMyItineraryList(new FindCallback<Itinerary>() {
+        Itinerary.getMyItineraryListInBackground(new FindCallback<Itinerary>() {
             @Override
             public void done(List<Itinerary> objects, ParseException e) {
                 itineraryList = objects;
