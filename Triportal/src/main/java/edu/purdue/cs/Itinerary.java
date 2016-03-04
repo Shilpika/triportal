@@ -99,6 +99,18 @@ public class Itinerary extends ParseObject {
         return itinerary;
     }
 
+    static public Itinerary getById(String id) throws ParseException {
+        ParseQuery<Itinerary> query = ParseQuery.getQuery(Itinerary.class);
+        query.fromLocalDatastore();
+        return query.get(id);
+    }
+
+    static public Itinerary getById(String id, GetCallback callback) {
+        ParseQuery<Itinerary> query = ParseQuery.getQuery(Itinerary.class);
+        query.fromLocalDatastore();
+        query.getInBackground(id, callback);
+    }
+
     static public void getMyItineraryListInBackground(FindCallback<Itinerary> callback) {
         ParseQuery<Itinerary> query = _getMyItineraryList();
         query.findInBackground(callback);
