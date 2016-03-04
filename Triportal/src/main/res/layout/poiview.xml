@@ -10,5 +10,6 @@
         android:text="111"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="#fff" />
+        android:textColor="@color/black_overlay"
+        android:layout_marginLeft="50dp" />
 </LinearLayout>

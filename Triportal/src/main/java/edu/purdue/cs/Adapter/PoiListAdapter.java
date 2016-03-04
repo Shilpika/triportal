@@ -8,6 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.parse.ParseException;
+
 import java.util.*;
 import edu.purdue.cs.*;
 
@@ -31,20 +34,21 @@ public class PoiListAdapter extends BaseAdapter {
     public long getItemId(int i) { return i;}
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(int i, View convertView, ViewGroup viewGroup) {
         ViewHolder viewHolder;
+        View view = convertView;
         if (view != null){
             viewHolder = (ViewHolder)view.getTag();
         } else {
-            view = LayoutInflater.from(context).inflate(R.layout.poiview, viewGroup, false);
+            view = LayoutInflater.from(context).inflate(R.layout.poiview, null);
             viewHolder = new ViewHolder();
             view.setTag(viewHolder);
         }
 
         viewHolder.poi_detail = (TextView)view.findViewById(R.id.poi);
         Poi temp_poi = poiList.get(i);
-        String str = i + temp_poi.getName();
-        viewHolder.poi_detail.setText(str);
+        String str = i + "   "+ temp_poi.getName();
+        ((TextView)view.findViewById(R.id.poi)).setText(str);
 
         return view;
     }

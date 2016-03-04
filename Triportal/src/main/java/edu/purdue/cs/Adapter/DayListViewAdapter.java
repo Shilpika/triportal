@@ -1,6 +1,8 @@
 package edu.purdue.cs.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,9 @@ import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.parse.ParseException;
+
 import java.util.*;
 import edu.purdue.cs.*;
 
@@ -17,7 +22,10 @@ import edu.purdue.cs.*;
 public class DayListViewAdapter extends BaseAdapter{
     private Context context;
     private List<Day> dayList;
-        public DayListViewAdapter(List<Day> dayList, Context context) {
+    private ListView poilistview;
+
+    public DayListViewAdapter(List<Day> dayList, Context context) {
+        Log.d("tag", "Daylistcount"+dayList.size());
         this.dayList = dayList;
         this.context = context;
     }
@@ -31,24 +39,35 @@ public class DayListViewAdapter extends BaseAdapter{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        Log.d("tag", ""+position);
         ViewHolder viewHolder;
         View view = convertView;
         ViewGroup viewGroup = parent;
         if (view != null){
             viewHolder = (ViewHolder)view.getTag();
         } else {
-            view = LayoutInflater.from(context).inflate(R.layout.poilistview, viewGroup, false);
+            view = LayoutInflater.from(context).inflate(R.layout.poilistview, null);
             viewHolder = new ViewHolder();
             view.setTag(viewHolder);
         }
-
-        viewHolder.textdate = (TextView)convertView.findViewById(R.id.date);
-        viewHolder.poilist = (ListView)convertView.findViewById(R.id.poi_list);
+        Log.d("viewtag", "view tag set");
+        //TextView temp;
+        //temp = (TextView) view.findViewById(R.id.date);
+        viewHolder.textdate = (TextView) view.findViewById(R.id.date);
+        viewHolder.poilist = (ListView) view.findViewById(R.id.poi_list);
 
         String str = "Day"+ position; //Day + number
-        viewHolder.textdate.setText(str);
+        ((TextView) view.findViewById(R.id.date)).setText(str);
+        //viewHolder.textdate.setText(str);
+        //poilistview = (ListView) ((DayListView)context).findViewById(R.id.poi_list);
         //PoiListAdapter
-        PoiListAdapter adapter = new PoiListAdapter(dayList.get(position).getPoiList(), context);
+        PoiListAdapter adapter = null;
+        try {
+            adapter = new PoiListAdapter(dayList.get(position).getPoiList(), context);
+            viewHolder.poilist.setAdapter(adapter);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         viewHolder.poilist.setAdapter(adapter);
         //根据PoilistView的高度计算Daylist高度
         setListViewHeightBasedOnChildren(viewHolder.poilist);
