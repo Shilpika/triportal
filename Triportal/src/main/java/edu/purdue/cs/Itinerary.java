@@ -22,7 +22,7 @@ public class Itinerary extends ParseObject {
         return getInt("numberOfDays");
     }
 
-    public void getDays(FindCallback<Day> callback) {
+    public void getDaysInBackground(FindCallback<Day> callback) {
         ParseQuery<Day> query = ParseQuery.getQuery(Day.class);
         query.whereEqualTo("itinerary", this);
         query.orderByAscending("dayIndex");
@@ -36,7 +36,7 @@ public class Itinerary extends ParseObject {
         return query.find();
     }
 
-    static public void getMyItineraryList(FindCallback<Itinerary> callback) {
+    static public void getMyItineraryListInBackground(FindCallback<Itinerary> callback) {
         ParseQuery<Itinerary> query = ParseQuery.getQuery(Itinerary.class);
         query.whereEqualTo("owner", ParseUser.getCurrentUser());
         query.orderByDescending("createdAt");
