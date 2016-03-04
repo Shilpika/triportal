@@ -83,6 +83,11 @@ public class Itinerary extends ParseObject {
         query.findInBackground(callback);
     }
 
+    public void deleteMyItineraryListEventually(DeleteCallback callback) throws ParseException {
+        this.unpin();
+        this.deleteEventually(callback);
+    }
+
     public List<Day> getDays() throws ParseException {
         ParseQuery<Day> query = _getDays();
         return query.find();

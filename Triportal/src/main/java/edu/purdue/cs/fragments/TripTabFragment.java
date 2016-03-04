@@ -20,11 +20,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.*;
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import edu.purdue.cs.*;
@@ -130,10 +132,26 @@ public class TripTabFragment extends TabFragment {
         // this should be working since the order of the List View is base on the ItneraryList we fetch from server
         Itinerary itinerary = itineraryList.get(index);
         // make sure this itinerary is pin in local storage
+        Log.d("Display Itinerary", itinerary.getTitle());
+        Toast.makeText(getActivity(), "Fetching Data.." , Toast.LENGTH_SHORT).show();
         itinerary.pinInBackground();
         Intent intent = new Intent(getActivity(), DayListView.class);
         intent.putExtra("it_ID",itinerary.getObjectId());
         getActivity().startActivity(intent);
+
+    }
+
+    private void deleteListItem(int index) throws ParseException {
+        // this should be working since the order of the List View is base on the ItneraryList we fetch from server
+        Itinerary itinerary = itineraryList.get(index);
+        // make sure this itinerary is pin in local storage
+        itinerary.deleteMyItineraryListEventually(new DeleteCallback() {
+            @Override
+            public void done(ParseException e) {
+                Toast.makeText(TripTabFragment.this.getActivity(), "Delete Success" , Toast.LENGTH_SHORT).show();
+                TripTabFragment.this.refreshList();
+            }
+        });
 
     }
 
@@ -167,6 +185,11 @@ public class TripTabFragment extends TabFragment {
                   //  Toast.makeText(getActivity(), "Clicked on Left Action Button of List Item " + i, Toast.LENGTH_SHORT).show();
                 } else if (v == tripList.getChildAt(i - tripList.getFirstVisiblePosition()).findViewById(R.id.list_item_card_button_2)) {
                     //Delete Itnerary, delete on server
+                    try {
+                        TripTabFragment.this.deleteListItem(i);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     // PERFORM ANOTHER ACTION WITH THE ITEM AT POSITION i
                    // Toast.makeText(getActivity(), "Clicked on Right Action Button of List Item " + i, Toast.LENGTH_SHORT).show();
                 }
