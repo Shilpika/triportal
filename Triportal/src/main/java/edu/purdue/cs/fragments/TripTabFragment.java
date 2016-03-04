@@ -17,7 +17,9 @@
 package edu.purdue.cs.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,10 +27,13 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import edu.purdue.cs.CreateItineraryView;
 import edu.purdue.cs.Itinerary;
+import edu.purdue.cs.Startup;
 import edu.purdue.cs.util.template.TabFragment;
 
 import edu.purdue.cs.R;
+import edu.purdue.cs.util.view.SlidingTabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,19 +46,51 @@ public class TripTabFragment extends TabFragment {
      */
 
     private ListView tripList;
+    private ImageButton createButton;
     private List<Itinerary> itineraryList;
+    private Context pContext;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView =  inflater.inflate(R.layout.trip_tab, container, false);
         //inflating the card-style list
         tripList = (ListView) rootView.findViewById(R.id.trip_list);
+        createButton = (ImageButton) rootView.findViewById(R.id.trip_tab_create_i_btn);
         setupList();
+        setupButton();
+
+
 
         return rootView;
 
     }
 
+    public void setupButton() {
+
+        /**
+         * set up create button(s), this could be from various tabs, currently only from the trip tab
+         */
+
+        createButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //Link crate button to the CreateItineraryView
+                Intent i = new Intent(getActivity(),CreateItineraryView.class);
+                getActivity().startActivity(i);
+               // getActivity().finish();
+            }
+        });
+    }
+
+
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        refreshList();
+    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -68,14 +105,16 @@ public class TripTabFragment extends TabFragment {
     }
 
     private void setupList() {
-        tripList.setAdapter(createAdapter());
-        tripList.setOnItemClickListener(new ListItemClickListener());
         Itinerary.getMyItineraryList(new FindCallback<Itinerary>() {
             @Override
             public void done(List<Itinerary> objects, ParseException e) {
                 itineraryList = objects;
             }
         });
+       // assert(itineraryList.size() != 0);
+        tripList.setAdapter(createAdapter());
+        tripList.setOnItemClickListener(new ListItemClickListener());
+
     }
 
     private void refreshList() {
@@ -83,11 +122,11 @@ public class TripTabFragment extends TabFragment {
             @Override
             public void done(List<Itinerary> objects, ParseException e) {
                 itineraryList = objects;
+                TripListAdapter adapter = (TripListAdapter) tripList.getAdapter();
+                adapter.updateList(itineraryList);
+                adapter.notifyDataSetChanged();
             }
         });
-        TripListAdapter adapter = (TripListAdapter) tripList.getAdapter();
-        adapter.updateList(itineraryList);
-
     }
 
     private TripListAdapter createAdapter() {
@@ -96,12 +135,18 @@ public class TripTabFragment extends TabFragment {
 //        for (int i = 0; i < 100; i++) {
 //            items.add(i, "Image for List Item " + i);
 //        }
-        for(Itinerary i : itineraryList) {
-            items.add(i.getTitle());
+        if(itineraryList != null) {
+            for (Itinerary i : itineraryList) {
+                items.add(i.getTitle());
+            }
+        } else {
+            items.add("No item in list");
         }
 
         return new TripListAdapter(getActivity(), items,itineraryList, new ListItemButtonClickListener());
     }
+
+
 
     private final class ListItemButtonClickListener implements View.OnClickListener {
         @Override

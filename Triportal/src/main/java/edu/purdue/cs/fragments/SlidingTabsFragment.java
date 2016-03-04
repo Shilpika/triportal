@@ -16,37 +16,48 @@
 
 package edu.purdue.cs.fragments;
 
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import edu.purdue.cs.CreateItineraryView;
+import edu.purdue.cs.Startup;
 import edu.purdue.cs.util.template.TabFragment;
 import edu.purdue.cs.util.view.SlidingTabLayout;
 import edu.purdue.cs.R;
 
+import java.text.Format;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SlidingTabsFragment extends Fragment {
 
+    public enum PagerItemTag {TRIP,DISCOVER}
 
-    static class PagerItem {
+
+
+
+    public class PagerItem {
         private final TabFragment mfragment;
         private final CharSequence mTitle;
+        private final PagerItemTag mTag;
 
-        PagerItem(CharSequence title,TabFragment fragment) {
+        PagerItem(CharSequence title,TabFragment fragment,PagerItemTag tag) {
             mfragment = fragment;
             mTitle = title;
+            mTag = tag;
+
         }
 
 
-        Fragment createFragment() {
+        public Fragment getFragment() {
             return mfragment;
         }
 
@@ -57,6 +68,8 @@ public class SlidingTabsFragment extends Fragment {
         CharSequence getTitle() {
             return mTitle;
         }
+
+        PagerItemTag getTag() {return mTag;}
         
     }
 
@@ -76,12 +89,16 @@ public class SlidingTabsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mTabs.add(new PagerItem(
                 getString(R.string.title_tab_trip),
-                new TripTabFragment()
+                new TripTabFragment(),
+                PagerItemTag.TRIP
         ));
         mTabs.add(new PagerItem(
                 getString(R.string.title_tab_discover),
-                new TripTabFragment()
+                new TripTabFragment(),
+                PagerItemTag.DISCOVER
         ));
+
+
 
         //TODO: Add discover fragment to Pager
 
@@ -90,6 +107,17 @@ public class SlidingTabsFragment extends Fragment {
 //                null
 //        ));
 
+    }
+
+    public PagerItem getPagerItembyTag(PagerItemTag tag) {
+        for(PagerItem item : mTabs) {
+            Log.d("PagerItem rotation", item.getTitle().toString());
+            if(item.getTag().equals(tag)) {
+                return item;
+            }
+        }
+        assert(false);
+        return null;
     }
 
     /**
@@ -148,11 +176,11 @@ public class SlidingTabsFragment extends Fragment {
         /**
          * Return the {@link android.support.v4.app.Fragment} to be displayed at {@code position}.
          * <p>
-         * Here we return the value returned from {@link PagerItem#createFragment()}.
+         * Here we return the value returned from {@link PagerItem#getFragment()}.
          */
         @Override
         public Fragment getItem(int i) {
-            return mTabs.get(i).createFragment();
+            return mTabs.get(i).getFragment();
         }
 
         @Override
