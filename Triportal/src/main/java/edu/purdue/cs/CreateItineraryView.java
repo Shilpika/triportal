@@ -6,15 +6,21 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
+
+import com.parse.ParseException;
+import com.parse.SaveCallback;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class CreateItineraryView extends AppCompatActivity {
@@ -25,7 +31,7 @@ public class CreateItineraryView extends AppCompatActivity {
     Button bt;
     EditText StartDate;
     EditText title;
-    String ItineraryTitle;
+    Date sDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +47,6 @@ public class CreateItineraryView extends AppCompatActivity {
         showDialogOnClick();
 
         title = (EditText)findViewById(R.id.title);
-        ItineraryTitle = title.getText().toString();
         Toolbar actionbar = (Toolbar) findViewById(R.id.BarTitle);
         setSupportActionBar(actionbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -64,6 +69,21 @@ public class CreateItineraryView extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_create_finish) {
+
+            Itinerary itinerary = Itinerary.create();
+            if(title.getText().length() <= 0 || sDate == null){
+                Toast.makeText(getApplicationContext(), "Invaild input", Toast.LENGTH_LONG).show();
+                return true;
+            }
+            itinerary.setTitle(title.getText().toString());
+            itinerary.setStartDate(sDate);
+            itinerary.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    Log.d("finish", "Finish");
+                    finish();
+                }
+            });
             return true;
         }
         return false;
@@ -97,6 +117,9 @@ public class CreateItineraryView extends AppCompatActivity {
             y = year;
             m = monthOfYear + 1;
             d = dayOfMonth;
+            Calendar cal = Calendar.getInstance();
+            cal.set(y + 1900, m, d);
+            sDate = cal.getTime();
             StartDate.setText(m + "/" + d + "/" + y);
         }
     };
