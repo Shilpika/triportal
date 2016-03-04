@@ -58,6 +58,9 @@ public class Startup extends AppCompatActivity {
 
     //noinspection SimplifiableIfStatement
     if (id == R.id.action_user_settings) {
+      Intent user = new Intent(Startup.this, UserProfile.class);
+      startActivity(user);
+      finish();
       return true;
     }
 

@@ -41,6 +41,11 @@ public class CreateItineraryView extends AppCompatActivity {
         setSupportActionBar(actionbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         actionbar.setTitle("Create New Itinerary");
+
+
+
+
+
     }
 
 

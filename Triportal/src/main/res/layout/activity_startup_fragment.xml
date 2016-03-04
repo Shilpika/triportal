@@ -12,7 +12,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/activity_startup_fragment">
-    <!-- TODO: Turn this into ViewPage, The contents will be in tabs-->
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/startupActionBar"
