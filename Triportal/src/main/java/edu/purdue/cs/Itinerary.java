@@ -34,7 +34,12 @@ public class Itinerary extends ParseObject {
 
     public Itinerary() {
         super();
-        setOwner(ParseUser.getCurrentUser());
+    }
+
+    public static Itinerary create() {
+        Itinerary itinerary = new Itinerary();
+        itinerary.setOwner(ParseUser.getCurrentUser());
+        return itinerary;
     }
 
     public String getTitle() {
