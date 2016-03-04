@@ -12,6 +12,9 @@
     <style name="AppTheme" parent="BaseTheme">
 
     </style>
+    <style name="CreateViewTheme" parent="AppTheme">
+        <item name="android:windowBackground">@color/cardview_light_background</item>
+    </style>
 
     <style name="SplashTheme" parent="android:Theme.Black.NoTitleBar">
         <item name="android:windowContentOverlay">@null</item>

@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.parse.Parse;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 public class UserProfile extends AppCompatActivity {
@@ -23,9 +24,9 @@ public class UserProfile extends AppCompatActivity {
 
 
         ParseUser user = ParseUser.getCurrentUser();
-        String username = user.getEmail();
+        //String username = user.getEmail();
 
-        
+        String username = user.getString("name");
 
         action.setTitle(username);
 
