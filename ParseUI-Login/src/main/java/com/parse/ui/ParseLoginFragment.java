@@ -159,6 +159,11 @@ public class ParseLoginFragment extends ParseLoginFragmentBase {
       usernameField.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
     }
 
+    if (config.isUsingDefaultCredentials()) {
+      usernameField.setText(config.getDefaultEmail());
+      passwordField.setText(config.getDefaultPassword());
+    }
+
     if (config.getParseLoginButtonText() != null) {
       parseLoginButton.setText(config.getParseLoginButtonText());
     }
