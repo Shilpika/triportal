@@ -104,7 +104,7 @@ public class SharedItineraryListFragment extends TabFragment {
     }
 
     private void setupList() {
-        Itinerary.getMyItineraryListInBackground(new FindCallback<Itinerary>() {
+        Itinerary.getSharedItineraryListInBackground(new FindCallback<Itinerary>() {
             @Override
             public void done(List<Itinerary> objects, ParseException e) {
                 itineraryList = objects;
@@ -117,7 +117,7 @@ public class SharedItineraryListFragment extends TabFragment {
     }
 
     private void refreshList() {
-        Itinerary.getMyItineraryListInBackground(new FindCallback<Itinerary>() {
+        Itinerary.getSharedItineraryListInBackground(new FindCallback<Itinerary>() {
             @Override
             public void done(List<Itinerary> objects, ParseException e) {
                 itineraryList = objects;
