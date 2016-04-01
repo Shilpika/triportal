@@ -32,6 +32,12 @@ public class Itinerary extends ParseObject {
         return query;
     }
 
+    static private ParseQuery<Itinerary> _getSharedItineraryList() {
+        ParseQuery<Itinerary> query = ParseQuery.getQuery(Itinerary.class);
+        query.orderByDescending("createdAt");
+        return query;
+    }
+
     public Itinerary() {
         super();
     }
@@ -150,6 +156,16 @@ public class Itinerary extends ParseObject {
 
     static public List<Itinerary> getMyItineraryList() throws ParseException {
         ParseQuery<Itinerary> query = _getMyItineraryList();
+        return query.find();
+    }
+
+    static public void getSharedItineraryListInBackground(FindCallback<Itinerary> callback) {
+        ParseQuery<Itinerary> query = _getSharedItineraryList();
+        query.findInBackground(callback);
+    }
+
+    static public List<Itinerary> getSharedItineraryList() throws ParseException {
+        ParseQuery<Itinerary> query = _getSharedItineraryList();
         return query.find();
     }
 }
