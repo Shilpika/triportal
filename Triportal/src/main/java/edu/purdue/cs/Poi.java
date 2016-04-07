@@ -16,7 +16,7 @@ public class Poi extends ParseObject {
         return getString("description");
     }
 
-    public Double getRating() {
+    public double getRating() {
         return getDouble("rating");
     }
 
