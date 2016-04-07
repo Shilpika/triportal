@@ -1,6 +1,6 @@
 package edu.purdue.cs.fragments;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -43,6 +43,14 @@ public class PoiDetailFragment extends Fragment {
     TextView detailDescription;
     Poi poi;
 
+    public static PoiDetailFragment newInstance(){
+        return new PoiDetailFragment();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
