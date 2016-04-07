@@ -17,6 +17,11 @@ public class Day extends ParseObject {
         return day;
     }
 
+    private ParseQuery<Poi> _getPoiList() {
+        ParseRelation<Poi> relation = this.getRelation("poiList");
+        return relation.getQuery();
+    }
+
     public Day() {
         super();
     }
@@ -26,13 +31,13 @@ public class Day extends ParseObject {
     }
 
     public void getPoiListInBackground(FindCallback<Poi> callback) {
-        List<Poi> poiList = getList("poiList");
-        ParseObject.fetchAllIfNeededInBackground(poiList, callback);
+        ParseQuery<Poi> query = _getPoiList();
+        query.findInBackground(callback);
     }
 
     public List<Poi> getPoiList() throws ParseException {
-        List<Poi> poiList = getList("poiList");
-        return ParseObject.fetchAll(poiList);
+        ParseQuery<Poi> query = _getPoiList();
+        return query.find();
     }
 
     public Day fork(Itinerary itinerary) throws ParseException {

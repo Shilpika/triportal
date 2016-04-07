@@ -20,11 +20,23 @@ public class Poi extends ParseObject {
         return getDouble("rating");
     }
 
-    public ParseFile getImage() {
-        return getParseFile("image");
+    public int getNumReviews() {
+        return getInt("num_reviews");
     }
 
-    public ParseGeoPoint getLocation() {
-        return getParseGeoPoint("location");
+    public String getLocationString () {
+        return getString("location_string");
+    }
+
+    public int getLocationId () {
+        return getInt("location_id");
+    }
+
+    public String getImage() {
+        return getString("image");
+    }
+
+    public ParseGeoPoint getGeoPoint() {
+        return getParseGeoPoint("geo_point");
     }
 }

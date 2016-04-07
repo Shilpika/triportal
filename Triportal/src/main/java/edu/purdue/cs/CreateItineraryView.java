@@ -118,7 +118,7 @@ public class CreateItineraryView extends AppCompatActivity {
             m = monthOfYear + 1;
             d = dayOfMonth;
             Calendar cal = Calendar.getInstance();
-            cal.set(y + 1900, m, d);
+            cal.set(y, m, d);
             sDate = cal.getTime();
             StartDate.setText(m + "/" + d + "/" + y);
         }

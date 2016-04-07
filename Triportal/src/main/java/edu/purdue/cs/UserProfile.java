@@ -1,6 +1,8 @@
 package edu.purdue.cs;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -8,10 +10,34 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 
 public class UserProfile extends AppCompatActivity {
+
+
+    private static void setAvatarInBackground(Bitmap avatar, SaveCallback callback) {
+        ByteArrayOutputStream pngOut = new ByteArrayOutputStream();
+        avatar.compress(Bitmap.CompressFormat.PNG, 100, pngOut);
+        ParseFile file = new ParseFile("avatar.png", pngOut.toByteArray());
+        ParseUser user = ParseUser.getCurrentUser();
+        user.add("avatar", file);
+        user.saveInBackground(callback);
+    }
+
+    private static Bitmap getAvatar() throws ParseException {
+        ParseUser user = ParseUser.getCurrentUser();
+        ParseFile file = user.getParseFile("avatar");
+        ByteArrayInputStream pngIn = new ByteArrayInputStream(file.getData());
+        Bitmap avatar = BitmapFactory.decodeStream(pngIn);
+        return avatar;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

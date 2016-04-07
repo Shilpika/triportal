@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class TripTabFragment extends TabFragment {
+public class SharedItineraryListFragment extends TabFragment {
 
     /**
      * inflating view of tab contents
@@ -51,7 +51,7 @@ public class TripTabFragment extends TabFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.trip_tab, container, false);
+        View rootView =  inflater.inflate(R.layout.trip_tab, container, false);
         //inflating the card-style list
         tripList = (ListView) rootView.findViewById(R.id.trip_list);
         createButton = (ImageButton) rootView.findViewById(R.id.trip_tab_create_i_btn);
@@ -76,7 +76,7 @@ public class TripTabFragment extends TabFragment {
                 //Link crate button to the CreateItineraryView
                 Intent i = new Intent(getActivity(),CreateItineraryView.class);
                 getActivity().startActivity(i);
-               // getActivity().finish();
+                // getActivity().finish();
             }
         });
     }
@@ -104,24 +104,24 @@ public class TripTabFragment extends TabFragment {
     }
 
     private void setupList() {
-        Itinerary.getMyItineraryListInBackground(new FindCallback<Itinerary>() {
+        Itinerary.getSharedItineraryListInBackground(new FindCallback<Itinerary>() {
             @Override
             public void done(List<Itinerary> objects, ParseException e) {
                 itineraryList = objects;
             }
         });
-       // assert(itineraryList.size() != 0);
+        // assert(itineraryList.size() != 0);
         tripList.setAdapter(createAdapter());
         tripList.setOnItemClickListener(new ListItemClickListener());
 
     }
 
     private void refreshList() {
-        Itinerary.getMyItineraryListInBackground(new FindCallback<Itinerary>() {
+        Itinerary.getSharedItineraryListInBackground(new FindCallback<Itinerary>() {
             @Override
             public void done(List<Itinerary> objects, ParseException e) {
                 itineraryList = objects;
-                TripListAdapter adapter = (TripListAdapter) tripList.getAdapter();
+                SharedItineraryListAdapter adapter = (SharedItineraryListAdapter) tripList.getAdapter();
                 adapter.updateList(itineraryList);
                 adapter.notifyDataSetChanged();
             }
@@ -141,21 +141,8 @@ public class TripTabFragment extends TabFragment {
 
     }
 
-    private void deleteListItem(int index) throws ParseException {
-        // this should be working since the order of the List View is base on the ItneraryList we fetch from server
-        Itinerary itinerary = itineraryList.get(index);
-        // make sure this itinerary is pin in local storage
-        itinerary.deleteMyItineraryListEventually(new DeleteCallback() {
-            @Override
-            public void done(ParseException e) {
-                Toast.makeText(TripTabFragment.this.getActivity(), "Delete Success" , Toast.LENGTH_SHORT).show();
-                TripTabFragment.this.refreshList();
-            }
-        });
 
-    }
-
-    private TripListAdapter createAdapter() {
+    private SharedItineraryListAdapter createAdapter() {
         ArrayList<List> list = new ArrayList<>(3);
         ArrayList<String> titles = new ArrayList<String>();
         ArrayList<String> days = new ArrayList<>();
@@ -181,7 +168,7 @@ public class TripTabFragment extends TabFragment {
         list.add(dates);
 
 
-        return new TripListAdapter(getActivity(), list,itineraryList, new ListItemButtonClickListener());
+        return new SharedItineraryListAdapter(getActivity(), list,itineraryList, new ListItemButtonClickListener());
     }
 
 
@@ -190,20 +177,11 @@ public class TripTabFragment extends TabFragment {
         @Override
         public void onClick(View v) {
             for (int i = tripList.getFirstVisiblePosition(); i <= tripList.getLastVisiblePosition(); i++) {
-                if (v == tripList.getChildAt(i - tripList.getFirstVisiblePosition()).findViewById(R.id.list_item_card_button_1)) {
+                if (v == tripList.getChildAt(i - tripList.getFirstVisiblePosition()).findViewById(R.id.shared_item_card_button_1)) {
                     //View itnernary, transit to the next activity
-                    TripTabFragment.this.viewListItem(i);
+                    SharedItineraryListFragment.this.viewListItem(i);
                     // PERFORM AN ACTION WITH THE ITEM AT POSITION i
-                  //  Toast.makeText(getActivity(), "Clicked on Left Action Button of List Item " + i, Toast.LENGTH_SHORT).show();
-                } else if (v == tripList.getChildAt(i - tripList.getFirstVisiblePosition()).findViewById(R.id.list_item_card_button_2)) {
-                    //Delete Itnerary, delete on server
-                    try {
-                        TripTabFragment.this.deleteListItem(i);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    // PERFORM ANOTHER ACTION WITH THE ITEM AT POSITION i
-                   // Toast.makeText(getActivity(), "Clicked on Right Action Button of List Item " + i, Toast.LENGTH_SHORT).show();
+                    //  Toast.makeText(getActivity(), "Clicked on Left Action Button of List Item " + i, Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -221,7 +199,7 @@ public class TripTabFragment extends TabFragment {
 
 }
 
-class TripListAdapter extends BaseAdapter {
+class SharedItineraryListAdapter extends BaseAdapter {
     private List<String> titleList;
     private List<String> dateList;
     private List<String> daysList;
@@ -231,7 +209,7 @@ class TripListAdapter extends BaseAdapter {
     private final View.OnClickListener itemClickListener;
     private final Context context;
 
-    public TripListAdapter(Context context, List<List> lists,List<Itinerary> itineraryList, View.OnClickListener itemClickListener) {
+    public SharedItineraryListAdapter(Context context, List<List> lists,List<Itinerary> itineraryList, View.OnClickListener itemClickListener) {
         this.context = context;
         this.titleList = lists.get(0);
         this.daysList = lists.get(1);
@@ -278,14 +256,13 @@ class TripListAdapter extends BaseAdapter {
         ViewHolder holder;
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.trip_tab_list_item, null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.shared_list_item, null);
 
             holder = new ViewHolder();
-            holder.itemTitle = (TextView) convertView.findViewById(R.id.trip_tab_list_item_title);
-            holder.itemButton1 = (Button) convertView.findViewById(R.id.list_item_card_button_1);
-            holder.itemButton2 = (Button) convertView.findViewById(R.id.list_item_card_button_2);
-            holder.itemDate = (TextView) convertView.findViewById(R.id.trip_tab_list_item_date);
-            holder.itemDays = (TextView) convertView.findViewById(R.id.trip_tab_list_item_days);
+            holder.itemTitle = (TextView) convertView.findViewById(R.id.shared_tab_list_item_title);
+            holder.itemButton1 = (Button) convertView.findViewById(R.id.shared_item_card_button_1);
+            holder.itemDate = (TextView) convertView.findViewById(R.id.shared_tab_list_item_date);
+            holder.itemDays = (TextView) convertView.findViewById(R.id.shared_tab_list_item_days);
             convertView.setTag(holder);
 
         } else {
@@ -298,7 +275,6 @@ class TripListAdapter extends BaseAdapter {
 
         if (itemClickListener != null) {
             holder.itemButton1.setOnClickListener(itemClickListener);
-            holder.itemButton2.setOnClickListener(itemClickListener);
         }
 
         return convertView;
@@ -309,7 +285,6 @@ class TripListAdapter extends BaseAdapter {
         private TextView itemDays;
         private TextView itemDate;
         private Button itemButton1;
-        private Button itemButton2;
     }
 }
 
