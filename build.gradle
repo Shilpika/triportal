@@ -5,31 +5,32 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.5.0'
-}
-
-allprojects {
-    repositories {
-        jcenter()
     }
-}
 
-ext {
-    compileSdkVersion = 23
-    buildToolsVersion = "23.0.2"
-    supportLibVersion = '23.2.1'
+    allprojects {
+        repositories {
+            jcenter()
+        }
+    }
 
-    minSdkVersion = 21
-    targetSdkVersion = 23
+    ext {
+        compileSdkVersion = 23
+        buildToolsVersion = "23.0.2"
+        supportLibVersion = '23.2.1'
 
-    androidSupport = 'com.android.support:support-v4:23.2.1'
-    androidAppCompat = 'com.android.support:appcompat-v7:23.2.1'
-    androidDesign = 'com.android.support:design:23.2.1'
+        minSdkVersion = 21
+        targetSdkVersion = 23
 
-    parse = 'com.parse:parse-android:1.13.0'
-    parseBolts = 'com.parse.bolts:bolts-tasks:1.4.0'
-    parseFacebookUtils = 'com.parse:parsefacebookutils-v4-android:1.10.4@aar'
-    parseTwitterUtils = 'com.parse:parsetwitterutils-android:1.10.5'
+        androidSupport = 'com.android.support:support-v4:23.2.1'
+        androidAppCompat = 'com.android.support:appcompat-v7:23.2.1'
+        androidDesign = 'com.android.support:design:23.2.1'
 
-    DragListView = 'com.github.woxthebox:draglistview:1.2.2'
-    facebookSDK = 'com.facebook.android:facebook-android-sdk:4.9.0'
+        parse = 'com.parse:parse-android:1.13.0'
+        parseBolts = 'com.parse.bolts:bolts-tasks:1.4.0'
+        parseFacebookUtils = 'com.parse:parsefacebookutils-v4-android:1.10.4@aar'
+        parseTwitterUtils = 'com.parse:parsetwitterutils-android:1.10.5'
+
+        DragListView = 'com.github.woxthebox:draglistview:1.2.2'
+        facebookSDK = 'com.facebook.android:facebook-android-sdk:4.9.0'
+    }
 }

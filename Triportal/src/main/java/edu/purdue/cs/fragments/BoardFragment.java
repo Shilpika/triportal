@@ -73,7 +73,7 @@ public class BoardFragment extends Fragment {
         mBoardView.setBoardListener(new BoardView.BoardListener() {
             @Override
             public void onItemDragStarted(int column, int row) {
-                Toast.makeText(mBoardView.getContext(), "Start - column: " + column + " row: " + row, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mBoardView.getContext(), "Start - column: " + column + " row: " + row, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -87,7 +87,7 @@ public class BoardFragment extends Fragment {
             @Override
             public void onItemDragEnded(int fromColumn, int fromRow, int toColumn, int toRow) {
                 if (fromColumn != toColumn || fromRow != toRow) {
-                    Toast.makeText(mBoardView.getContext(), "End - column: " + toColumn + " row: " + toRow, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mBoardView.getContext(), "End - column: " + toColumn + " row: " + toRow, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -167,7 +167,6 @@ public class BoardFragment extends Fragment {
                 @Override
                 public void done(List<Poi> objects, ParseException e) {
                     addColumnList(objects);
-
                 }
             });
         }
@@ -178,23 +177,18 @@ public class BoardFragment extends Fragment {
 
         final ArrayList<Pair<Long, String>> mItemArray = new ArrayList<>();
         //The initial items in a day should be zero
-        int addItems = 2;
-        for (int i = 0; i < addItems; i++) {
-            long id = sCreatedItems++;
-            mItemArray.add(new Pair<>(id, "POI " + id));
-        }
 
-/*        for(Poi poi : PoiList) {
+        for(Poi poi : PoiList) {
             long id = sCreatedItems++;
             mItemArray.add(new Pair<>(id, poi.getName()));
-        }*/
+        }
 
         final int column = mColumns;
         //TODO: this adapter need to be refine to fit in out project
         final BoardAdapter listAdapter = new BoardAdapter(mItemArray, R.layout.board_item, R.id.board_item_layout, true);
         final View header = View.inflate(getActivity(), R.layout.board_column_header, null);
         ((TextView) header.findViewById(R.id.board_header_text)).setText("Day " + (mColumns + 1));
-        ((TextView) header.findViewById(R.id.board_header_text_2)).setText("" + addItems);
+        ((TextView) header.findViewById(R.id.board_header_text_2)).setText("" + PoiList.size());
         header.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
