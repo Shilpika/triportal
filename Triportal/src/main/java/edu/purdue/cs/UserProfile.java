@@ -110,12 +110,12 @@ public class UserProfile extends AppCompatActivity {
             cursor.close();
 
             Bitmap pic = BitmapFactory.decodeFile(picturePath);
-            setAvatarInBackground(pic, new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-
-                }
-            });
+//            setAvatarInBackground(pic, new SaveCallback() {
+//                @Override
+//                public void done(ParseException e) {
+//
+//                }
+//            });
             ImageView ci = (ImageView)findViewById(R.id.avatarView);
             ci.setImageBitmap(pic);
         }

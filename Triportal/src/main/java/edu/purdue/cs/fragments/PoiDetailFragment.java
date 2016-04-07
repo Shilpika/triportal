@@ -58,6 +58,7 @@ public class PoiDetailFragment extends Fragment {
 
         Bundle bundle = this.getArguments();
         String poi_id = bundle.getString("poi_id");
+        Log.d("PoiDetailFragment","Poi ID: " + poi_id);
         try {
             poi = Poi.getById(poi_id);
         } catch (ParseException e) {

@@ -43,7 +43,10 @@ public class PoiDetailView extends AppCompatActivity {
         //View rootView =  inflater.inflate(R.layout.trip_tab, container, false);
         toolbar = (Toolbar) findViewById(R.id.dayListViewActionBar);
 
+
+
         PoiDetailFragment fragment = PoiDetailFragment.newInstance();
+        fragment.setArguments(getIntent().getExtras());
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.day_list_frame, fragment, "fragment").commit();
 

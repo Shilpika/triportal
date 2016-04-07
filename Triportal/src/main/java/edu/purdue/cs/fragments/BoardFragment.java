@@ -175,17 +175,17 @@ public class BoardFragment extends Fragment {
     private void addColumnList(List<Poi> PoiList) {
         //TODO: turn this into adding days
 
-        final ArrayList<Pair<Long, String>> mItemArray = new ArrayList<>();
+        final ArrayList<Pair<Long, Poi>> mItemArray = new ArrayList<>();
         //The initial items in a day should be zero
 
         for(Poi poi : PoiList) {
             long id = sCreatedItems++;
-            mItemArray.add(new Pair<>(id, poi.getName()));
+            mItemArray.add(new Pair<>(id, poi));
         }
 
         final int column = mColumns;
         //TODO: this adapter need to be refine to fit in out project
-        final BoardAdapter listAdapter = new BoardAdapter(mItemArray, R.layout.board_item, R.id.board_item_layout, true);
+        final BoardAdapter listAdapter = new BoardAdapter(mItemArray, R.layout.board_item, R.id.board_item_layout, true,this);
         final View header = View.inflate(getActivity(), R.layout.board_column_header, null);
         ((TextView) header.findViewById(R.id.board_header_text)).setText("Day " + (mColumns + 1));
         ((TextView) header.findViewById(R.id.board_header_text_2)).setText("" + PoiList.size());

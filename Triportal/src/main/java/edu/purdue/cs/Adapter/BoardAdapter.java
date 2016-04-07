@@ -16,26 +16,36 @@
 
 package edu.purdue.cs.Adapter;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.parse.ParseException;
 import com.woxthebox.draglistview.DragItemAdapter;
+import edu.purdue.cs.Poi;
+import edu.purdue.cs.PoiDetailView;
 import edu.purdue.cs.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class BoardAdapter extends DragItemAdapter<Pair<Long, String>, BoardAdapter.ViewHolder> {
+public class BoardAdapter extends DragItemAdapter<Pair<Long, Poi>, BoardAdapter.ViewHolder> {
 
     private int mLayoutId;
     private int mGrabHandleId;
+    private Fragment mFragment;
 
-    public BoardAdapter(ArrayList<Pair<Long, String>> list, int layoutId, int grabHandleId, boolean dragOnLongPress) {
+    public BoardAdapter(ArrayList<Pair<Long, Poi>> list, int layoutId, int grabHandleId, boolean dragOnLongPress, Fragment fragment) {
         super(dragOnLongPress);
         mLayoutId = layoutId;
         mGrabHandleId = grabHandleId;
+        mFragment = fragment;
         setHasStableIds(true);
         setItemList(list);
     }
@@ -49,7 +59,7 @@ public class BoardAdapter extends DragItemAdapter<Pair<Long, String>, BoardAdapt
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        String text = mItemList.get(position).second;
+        String text = mItemList.get(position).second.getName();
         holder.mText.setText(text);
         holder.itemView.setTag(text);
     }
@@ -59,7 +69,7 @@ public class BoardAdapter extends DragItemAdapter<Pair<Long, String>, BoardAdapt
         return mItemList.get(position).first;
     }
 
-    public class ViewHolder extends DragItemAdapter<Pair<Long, String>, ViewHolder>.ViewHolder {
+    public class ViewHolder extends DragItemAdapter<Pair<Long, Poi>, ViewHolder>.ViewHolder {
         public TextView mText;
 
         public ViewHolder(final View itemView) {
@@ -70,7 +80,18 @@ public class BoardAdapter extends DragItemAdapter<Pair<Long, String>, BoardAdapt
 
         @Override
         public void onItemClicked(View view) {
-            Toast.makeText(view.getContext(), "Item clicked", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(view.getContext(), "Item clicked", Toast.LENGTH_SHORT).show();
+
+            Activity activity = mFragment.getActivity();
+            Intent intent = new Intent(activity, PoiDetailView.class);
+            Poi poi = mItemList.get(BoardAdapter.this.getPositionForItemId(ViewHolder.this.mItemId)).second;
+            try {
+                poi.pin();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            intent.putExtra("poi_id",poi.getObjectId());
+            activity.startActivity(intent);
         }
 
         @Override
