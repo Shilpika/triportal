@@ -32,6 +32,12 @@ public class Poi extends ParseObject {
         return getInt("location_id");
     }
 
+    static public Poi getById(String id) throws ParseException {
+        ParseQuery<Poi> query = ParseQuery.getQuery(Poi.class);
+        query.fromLocalDatastore();
+        return query.get(id);
+    }
+
     public String getImage() {
         return getString("image");
     }
