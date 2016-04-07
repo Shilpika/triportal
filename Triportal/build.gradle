@@ -9,6 +9,7 @@ dependencies {
     compile rootProject.ext.parseFacebookUtils
     compile rootProject.ext.parseTwitterUtils
     compile rootProject.ext.facebookSDK
+    compile rootProject.ext.DragListView
     compile project(':ParseUI-Login')
 }
 

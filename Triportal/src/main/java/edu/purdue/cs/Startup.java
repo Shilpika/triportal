@@ -43,51 +43,6 @@ public class Startup extends AppCompatActivity {
 
         assert (StartupTabFragmentView != null);
 
-        Log.d("Itinerary", "\nSynchronous Call...\n");
-
-        try {
-            List<Itinerary> itineraryList = Itinerary.getMyItineraryList();
-            for (Itinerary itinerary : itineraryList) {
-                Log.d("Itinerary", "Title: " + itinerary.getTitle());
-                List<Day> dayList = itinerary.getDays();
-                for (Day day: dayList) {
-                    Log.d("Itinerary", "Day: " + day.getDayIndex());
-                    List<Poi> poiList = day.getPoiList();
-                    for (Poi poi: poiList) {
-                        Log.d("Itinerary", "Poi: " + poi.getName());
-                    }
-                }
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        Log.d("Itinerary", "\nAsynchronous Call...\n");
-
-        Itinerary.getMyItineraryListInBackground(new FindCallback<Itinerary>() {
-            @Override
-            public void done(List<Itinerary> itineraryList, ParseException e) {
-                for (Itinerary itinerary : itineraryList) {
-                    Log.d("Itinerary", "Title: " + itinerary.getTitle());
-                    itinerary.getDaysInBackground(new FindCallback<Day>() {
-                        @Override
-                        public void done(List<Day> dayList, ParseException e) {
-                            for (Day day: dayList) {
-                                Log.d("Itinerary", "Day: " + day.getDayIndex());
-                                day.getPoiListInBackground(new FindCallback<Poi>() {
-                                    @Override
-                                    public void done(List<Poi> poiList, ParseException e) {
-                                        for (Poi poi: poiList) {
-                                            Log.d("Itinerary", "Poi: " + poi.getName());
-                                        }
-                                    }
-                                });
-                            }
-                        }
-                    });
-                }
-            }
-        });
     }
 
 

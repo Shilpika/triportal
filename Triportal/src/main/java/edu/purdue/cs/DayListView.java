@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -19,11 +21,12 @@ import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 
 import edu.purdue.cs.Adapter.DayListViewAdapter;
+import edu.purdue.cs.fragments.BoardFragment;
 
 /**
  * Created by Ge on 16/3/3.
  */
-public class DayListView extends Activity{
+public class DayListView extends AppCompatActivity{
     private Itinerary itinerary;
     private Toolbar toolbar;
     private ListView poilist;
@@ -33,14 +36,21 @@ public class DayListView extends Activity{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         setContentView(R.layout.daylistview);
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
         //View rootView =  inflater.inflate(R.layout.trip_tab, container, false);
         toolbar = (Toolbar) findViewById(R.id.dayListViewActionBar);
         poilist = (ListView) findViewById(R.id.day_list);
-        String itneraryID = getIntent().getExtras().getString("it_ID");
+        Bundle bundle = getIntent().getExtras();
+        String itneraryID = bundle.getString("it_ID");
 
-        Log.d("DayListView It Id", itneraryID);
+        BoardFragment fragment = BoardFragment.newInstance();
+        fragment.setArguments(bundle);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.day_list_frame, fragment, "fragment").commit();
+
+      /*  Log.d("DayListView It Id", itneraryID);
 
         try {
             itinerary = Itinerary.getById(itneraryID);
@@ -55,7 +65,7 @@ public class DayListView extends Activity{
             poilist.setAdapter(dayListViewAdapter);
         } catch (ParseException e) {
             e.printStackTrace();
-        }
+        }*/
 
 
     }

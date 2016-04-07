@@ -27,3 +27,7 @@
 -dontwarn android.app.Notification
 -dontwarn com.squareup.**
 -dontwarn okio.**
+
+# DragListView
+
+-keep class com.woxthebox.draglistview.** { *; }

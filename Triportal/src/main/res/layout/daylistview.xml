@@ -14,6 +14,10 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/day_list_frame">
     <ListView
         android:id="@+id/day_list"
         android:layout_width="match_parent"
@@ -24,4 +28,5 @@
         android:padding="0dp"
         android:scrollbarStyle="outsideOverlay" />
 
+    </FrameLayout>
 </LinearLayout>
