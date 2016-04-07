@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:id="@+id/poi_detail_image"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/poi_detail_image"
+            android:id="@+id/poi_detail_name"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/poi_detail_name"
+            android:id="@+id/poi_detail_location"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="10dp" />
+
+        <RatingBar
+            android:layout_width="200dp"
+            android:layout_height="30dp"
+            android:id="@+id/poi_detail_ratingBar"
+            android:layout_below="@+id/poi_detail_name"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="20dp"
+            android:numStars="5"/>
+
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:id="@+id/poi_detail_description"
+            android:layout_centerVertical="true"
+            android:layout_below="@+id/poi_detail_ratingBar"
+            android:layout_alignStart="@+id/poi_detail_ratingBar"
+            android:layout_marginTop="10dp" />
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>

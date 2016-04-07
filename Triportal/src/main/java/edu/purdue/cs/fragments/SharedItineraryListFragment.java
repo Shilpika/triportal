@@ -45,7 +45,6 @@ public class SharedItineraryListFragment extends TabFragment {
      */
 
     private ListView tripList;
-    private ImageButton createButton;
     private List<Itinerary> itineraryList;
     private Context pContext;
     @Override
@@ -54,21 +53,15 @@ public class SharedItineraryListFragment extends TabFragment {
         View rootView =  inflater.inflate(R.layout.trip_tab, container, false);
         //inflating the card-style list
         tripList = (ListView) rootView.findViewById(R.id.trip_list);
-        createButton = (ImageButton) rootView.findViewById(R.id.trip_tab_create_i_btn);
         setupList();
-        setupButton();
-
-
 
         return rootView;
 
     }
 
-    public void setupButton() {
+    /*public void setupButton() {
 
-        /**
-         * set up create button(s), this could be from various tabs, currently only from the trip tab
-         */
+
 
         createButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -79,7 +72,7 @@ public class SharedItineraryListFragment extends TabFragment {
                 // getActivity().finish();
             }
         });
-    }
+    }*/
 
 
 
