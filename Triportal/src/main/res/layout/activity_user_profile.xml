@@ -15,6 +15,47 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose Image"
+        android:id="@+id/chooseImage"
+        android:layout_below="@+id/avatarView"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/avatarView" />
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/avatarView"
+        android:scaleType="fitCenter"
+        android:background="@color/light_grey"
+        android:layout_below="@+id/actionBar"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/black"
+        android:text="Username"
+        android:id="@+id/userName"
+        android:layout_below="@+id/actionBar"
+        android:paddingLeft="30dp"
+        android:paddingTop="15dp"
+        android:layout_toRightOf="@+id/avatarView"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Email Address"
+        android:textColor="@color/black"
+        android:id="@+id/emailAdd"
+        android:paddingLeft="30dp"
+        android:layout_below="@+id/userName"
+        android:layout_alignStart="@+id/userName" />
 
 
 </RelativeLayout>
