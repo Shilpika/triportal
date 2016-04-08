@@ -78,9 +78,14 @@ public class PoiDetailFragment extends Fragment {
         fixedDescirbe = (TextView)rootView.findViewById(R.id.description);
         detailDescription = (TextView)rootView.findViewById(R.id.poi_detail_description);
 
+        String imageUrl = poi.getImage();
+        if (imageUrl == null || imageUrl.isEmpty()) {
+            detailimage.setVisibility(View.GONE);
+        } else {
+            detailimage.setVisibility(View.VISIBLE);
+            new ImageDownloadTask(detailimage).execute(poi.getImage());
+        }
 
-
-        new ImageDownloadTask(detailimage).execute(poi.getImage());
         detailname.setText(poi.getName());
         detaillocation.setText(poi.getLocationString());
 
