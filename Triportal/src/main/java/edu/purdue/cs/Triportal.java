@@ -23,6 +23,10 @@ public class Triportal extends Application {
         // Enable Local Datastore.
         Parse.enableLocalDatastore(this);
 
+        ParseObject.registerSubclass(Itinerary.class);
+        ParseObject.registerSubclass(Poi.class);
+        ParseObject.registerSubclass(Day.class);
+
         // Initialize Parse support.
         Parse.initialize(this);
         Parse.setLogLevel(Parse.LOG_LEVEL_DEBUG);
@@ -37,10 +41,6 @@ public class Triportal extends Application {
         // Initialize ParseTwitter support.
         ParseTwitterUtils.initialize(getString(R.string.twitter_consumer_key),
                 getString(R.string.twitter_consumer_secret));
-
-        ParseObject.registerSubclass(Itinerary.class);
-        ParseObject.registerSubclass(Poi.class);
-        ParseObject.registerSubclass(Day.class);
     }
 
     @Override
