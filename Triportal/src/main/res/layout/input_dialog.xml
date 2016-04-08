@@ -14,7 +14,7 @@
         android:id="@+id/textView" />
 
     <EditText
-        android:id="@+id/oldPass"
+        android:id="@+id/newName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="Enter New Username"

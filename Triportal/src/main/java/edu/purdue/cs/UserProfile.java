@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -98,11 +99,11 @@ public class UserProfile extends AppCompatActivity {
         Toolbar action = (Toolbar)findViewById(R.id.actionBar);
         setSupportActionBar(action);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        ParseUser user = ParseUser.getCurrentUser();
+        final ParseUser user = ParseUser.getCurrentUser();
         String username = user.getString("name");
         action.setTitle(username);
 
-        TextView name = (TextView)findViewById(R.id.userName);
+        final TextView name = (TextView)findViewById(R.id.userName);
         name.setText(username);
 
         TextView email = (TextView)findViewById(R.id.emailAdd);
@@ -144,14 +145,19 @@ public class UserProfile extends AppCompatActivity {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(UserProfile.this);
         alertDialogBuilder.setView(promptView);
 
-        final EditText newUser = (EditText)findViewById(R.id.oldPass);
+        final EditText newUser = (EditText)promptView.findViewById(R.id.newName);
 
 
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        String input = newUser.getText().toString();
+                        Toast toast = Toast.makeText(getApplicationContext(), input, Toast.LENGTH_LONG);
+                        toast.show();
                         ParseUser user = ParseUser.getCurrentUser();
-                        user.setUsername(newUser.getText().toString());
+                        user.put("name", input);
+                        TextView name = (TextView)findViewById(R.id.userName);
+                        name.setText(input);
                         try {
                             user.save();
                         } catch (ParseException e) {
@@ -165,6 +171,7 @@ public class UserProfile extends AppCompatActivity {
                                 dialog.cancel();
                             }
                         });
+
 
         // create an alert dialog
         AlertDialog alert = alertDialogBuilder.create();
