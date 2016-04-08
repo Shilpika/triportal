@@ -49,6 +49,11 @@
         <item name="android:textColor">@color/grey</item>
     </style>
 
+    <style name="MyButton" parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">@color/com_parse_ui_facebook_login_button_focus</item>
+        <item name="colorButtonNormal">@color/com_facebook_messenger_blue</item>
+    </style>
+
     <!-- Backward-compatible version of ?android:attr/buttonBarButtonStyle -->
     <style name="ButtonBarButton" />
 

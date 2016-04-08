@@ -1,20 +1,29 @@
 package edu.purdue.cs;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -31,12 +40,41 @@ import java.io.ByteArrayOutputStream;
 public class UserProfile extends AppCompatActivity {
 
 
-    private static void setAvatarInBackground(Bitmap avatar, SaveCallback callback) {
+    // Storage Permissions
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
+    /**
+     * Checks if the app has permission to write to device storage
+     *
+     * If the app does not has permission then the user will be prompted to grant permissions
+     *
+     * @param activity
+     */
+    public static void verifyStoragePermissions(Activity activity) {
+        // Check if we have write permission
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
+    }
+
+
+    private static void setAvatarInBackground(Bitmap avatar, final SaveCallback callback) {
         ByteArrayOutputStream pngOut = new ByteArrayOutputStream();
         avatar.compress(Bitmap.CompressFormat.PNG, 100, pngOut);
         ParseFile file = new ParseFile("avatar.png", pngOut.toByteArray());
         ParseUser user = ParseUser.getCurrentUser();
-        user.add("avatar", file);
+        user.put("avatar", file);
         user.saveInBackground(callback);
     }
 
@@ -61,12 +99,12 @@ public class UserProfile extends AppCompatActivity {
         Toolbar action = (Toolbar)findViewById(R.id.actionBar);
         setSupportActionBar(action);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        ParseUser user = ParseUser.getCurrentUser();
+        final ParseUser user = ParseUser.getCurrentUser();
         String username = user.getString("name");
         action.setTitle(username);
 
-        TextView User = (TextView)findViewById(R.id.userName);
-        User.setText(username);
+        final TextView name = (TextView)findViewById(R.id.userName);
+        name.setText(username);
 
         TextView email = (TextView)findViewById(R.id.emailAdd);
         email.setText(user.getEmail());
@@ -92,11 +130,59 @@ public class UserProfile extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        Button password = (Button)findViewById(R.id.password);
+        password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changePassowrd();
+            }
+        });
+    }
+
+    protected void changePassowrd(){
+        LayoutInflater layoutInflater = LayoutInflater.from(UserProfile.this);
+        View promptView = layoutInflater.inflate(R.layout.input_dialog, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(UserProfile.this);
+        alertDialogBuilder.setView(promptView);
+
+        final EditText newUser = (EditText)promptView.findViewById(R.id.newName);
+
+
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        String input = newUser.getText().toString();
+                        Toast toast = Toast.makeText(getApplicationContext(), input, Toast.LENGTH_LONG);
+                        toast.show();
+                        ParseUser user = ParseUser.getCurrentUser();
+                        user.put("name", input);
+                        TextView name = (TextView)findViewById(R.id.userName);
+                        name.setText(input);
+                        try {
+                            user.save();
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        verifyStoragePermissions(this);
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
             Uri selectedImage = data.getData();
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
@@ -109,13 +195,13 @@ public class UserProfile extends AppCompatActivity {
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
 
-            Bitmap pic = BitmapFactory.decodeFile(picturePath);
-//            setAvatarInBackground(pic, new SaveCallback() {
-//                @Override
-//                public void done(ParseException e) {
-//
-//                }
-//            });
+            Bitmap pic = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(picturePath), 200, 200, true);
+            setAvatarInBackground(pic, new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+
+                }
+            });
             ImageView ci = (ImageView)findViewById(R.id.avatarView);
             ci.setImageBitmap(pic);
         }
