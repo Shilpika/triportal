@@ -41,6 +41,9 @@ public class PoiDetailFragment extends Fragment {
     TextView detaillocation;
     RatingBar detailrating;
     TextView detailDescription;
+    TextView detailscore;
+    TextView ratingTimes;
+    TextView fixedDescirbe;
     Poi poi;
 
     public static PoiDetailFragment newInstance(){
@@ -70,14 +73,31 @@ public class PoiDetailFragment extends Fragment {
         detailname = (TextView) rootView.findViewById(R.id.poi_detail_name);
         detaillocation = (TextView)rootView.findViewById(R.id.poi_detail_location);
         detailrating = (RatingBar)rootView.findViewById(R.id.poi_detail_ratingBar);
+        detailscore = (TextView)rootView.findViewById(R.id.poi_detail_ratingScore);
+        ratingTimes = (TextView)rootView.findViewById(R.id.poi_detail_ratingTimes);
+        fixedDescirbe = (TextView)rootView.findViewById(R.id.description);
         detailDescription = (TextView)rootView.findViewById(R.id.poi_detail_description);
+
+
 
         new ImageDownloadTask(detailimage).execute(poi.getImage());
         detailname.setText(poi.getName());
-        detailrating.setRating((float)poi.getRating());
         detaillocation.setText(poi.getLocationString());
-        detailDescription.setText(poi.getDescription())
-        ;
+
+        detailrating.setRating((float)poi.getRating());
+        String score = Double.toString(poi.getRating());
+        detailscore.setText(score + "/5.0");
+        String times = Integer.toString(poi.getNumReviews());
+        ratingTimes.setText(times + " Comments");
+
+        if(poi.getDescription().equals("")) {
+            fixedDescirbe.setText("");
+            detailDescription.setText("");
+        } else {
+            fixedDescirbe.setText("Description");
+            detailDescription.setText(poi.getDescription());
+        }
+
         return rootView;
 
 
