@@ -95,10 +95,104 @@ public class Itinerary extends ParseObject {
         return query.find();
     }
 
+    public void addOneDayInBackground(final GetCallback<Day> callback) {
+        final Itinerary thisItinerary = this;
+        final Day day = new Day();
+        day.add("itinerary", this);
+        day.add("dayIndex", getNumberOfDays());
+        day.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null)
+                    callback.done(null, e);
+                else {
+                    thisItinerary.increment("numOfDays");
+                    thisItinerary.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            callback.done(day, null);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    public Day addOneDay() throws ParseException {
+        final Day day = new Day();
+        day.add("itinerary", this);
+        day.add("dayIndex", getNumberOfDays());
+        day.save();
+        increment("numOfDays");
+        save();
+        return day;
+    }
+
+    public void removeDayAtInBackground(final int index, final SaveCallback callback) {
+        int numOfDays = getNumberOfDays();
+        if (index >= numOfDays || index < 0) {
+            callback.done(new ParseException(ParseException.INCORRECT_TYPE, "Invalid index"));
+            return;
+        }
+        final Itinerary thisItinerary = this;
+        ParseQuery<Day> query = ParseQuery.getQuery(Day.class);
+        query.whereEqualTo("itinerary", this);
+        query.whereGreaterThanOrEqualTo("dayIndex", index);
+        query.orderByAscending("dayIndex");
+        query.findInBackground(new FindCallback<Day>() {
+            @Override
+            public void done(List<Day> days, ParseException e) {
+                if (e != null) {
+                    callback.done(e);
+                    return;
+                }
+                try {
+                    for (Day day : days) {
+                        if (day.getInt("dayIndex") == index) {
+                            day.delete();
+                        } else {
+                            day.increment("dayIndex", -1);
+                            day.save();
+                        }
+                    }
+                } catch(ParseException err) {
+                    callback.done(err);
+                    return;
+                }
+                thisItinerary.increment("numOfDays", -1);
+                thisItinerary.saveInBackground(callback);
+            }
+        });
+    }
+
+    public void removeDayAt(final int index) throws ParseException {
+        int numOfDays = getNumberOfDays();
+        if (index >= numOfDays || index < 0) return;
+        ParseQuery<Day> query = ParseQuery.getQuery(Day.class);
+        query.whereEqualTo("itinerary", this);
+        query.whereGreaterThanOrEqualTo("dayIndex", index);
+        query.orderByAscending("dayIndex");
+        List<Day> days = query.find();
+        for (Day day : days) {
+            if (day.getInt("dayIndex") == index) {
+                day.delete();
+            } else {
+                day.increment("dayIndex", -1);
+                day.save();
+            }
+        }
+        increment("numOfDays", -1);
+        save();
+    }
+
     public void forkInBackground(final FunctionCallback<Itinerary> callback) {
         ParseCloud.callFunctionInBackground("fork_itinerary", _fork(), new FunctionCallback<String>() {
             @Override
             public void done(String objectId, ParseException e) {
+                if (e != null) {
+                    callback.done(null, e);
+                    return;
+                }
                 try {
                     ParseQuery<Itinerary> query = ParseQuery.getQuery(Itinerary.class);
                     Itinerary itinerary = query.get(objectId);
