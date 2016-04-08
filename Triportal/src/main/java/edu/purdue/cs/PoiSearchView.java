@@ -24,6 +24,8 @@ import edu.purdue.cs.Adapter.PoiListAdapter;
 
 public class PoiSearchView extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
+    final static int CONFIRM_POI = 1;
+
     private SearchView mSearchView;
     private ListView mSearchResults;
     private PoiListAdapter mResultsAdapter;
@@ -107,9 +109,20 @@ public class PoiSearchView extends AppCompatActivity implements AdapterView.OnIt
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Intent resultData = new Intent();
-        resultData.putExtra("poi_id", poi.getObjectId());
-        setResult(Activity.RESULT_OK, resultData);
-        finish();
+        Intent intent = new Intent(PoiSearchView.this, PoiDetailView.class);
+        intent.putExtra("poi_id", poi.getObjectId());
+        startActivityForResult(intent, PoiSearchView.CONFIRM_POI);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PoiSearchView.CONFIRM_POI) {
+            if (resultCode == RESULT_OK) {
+                String poi_id = data.getStringExtra("poi_id");
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("poi_id", poi_id);
+                setResult(Activity.RESULT_OK, returnIntent);
+                finish();
+            }
+        }
     }
 }
