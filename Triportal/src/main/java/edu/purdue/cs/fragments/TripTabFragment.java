@@ -16,7 +16,9 @@
 
 package edu.purdue.cs.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -141,18 +143,19 @@ public class TripTabFragment extends TabFragment {
 
     }
 
-    private void deleteListItem(int index) throws ParseException {
-        // this should be working since the order of the List View is base on the ItneraryList we fetch from server
+    private void deleteListItem(final int index) {
         Itinerary itinerary = itineraryList.get(index);
-        // make sure this itinerary is pin in local storage
-        itinerary.deleteMyItineraryListEventually(new DeleteCallback() {
-            @Override
-            public void done(ParseException e) {
-                Toast.makeText(TripTabFragment.this.getActivity(), "Delete Success" , Toast.LENGTH_SHORT).show();
-                TripTabFragment.this.refreshList();
-            }
-        });
-
+        try {
+            itinerary.deleteMyItineraryListEventually(new DeleteCallback() {
+                @Override
+                public void done(ParseException e) {
+                    Toast.makeText(TripTabFragment.this.getActivity(), "Delete Success" , Toast.LENGTH_SHORT).show();
+                    TripTabFragment.this.refreshList();
+                }
+            });
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     private TripListAdapter createAdapter() {
@@ -196,12 +199,27 @@ public class TripTabFragment extends TabFragment {
                     // PERFORM AN ACTION WITH THE ITEM AT POSITION i
                   //  Toast.makeText(getActivity(), "Clicked on Left Action Button of List Item " + i, Toast.LENGTH_SHORT).show();
                 } else if (v == tripList.getChildAt(i - tripList.getFirstVisiblePosition()).findViewById(R.id.list_item_card_button_2)) {
-                    //Delete Itnerary, delete on server
-                    try {
-                        TripTabFragment.this.deleteListItem(i);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                    final int index = i;
+                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which){
+                                case DialogInterface.BUTTON_POSITIVE:
+                                    //Yes button clicked
+                                    //Delete Itnerary, delete on server
+                                    TripTabFragment.this.deleteListItem(index);
+                                    break;
+
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    //No button clicked
+                                    break;
+                            }
+                        }
+                    };
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setMessage("Delete the itinerary?").setPositiveButton("Yes", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener).show();
                     // PERFORM ANOTHER ACTION WITH THE ITEM AT POSITION i
                    // Toast.makeText(getActivity(), "Clicked on Right Action Button of List Item " + i, Toast.LENGTH_SHORT).show();
                 }
