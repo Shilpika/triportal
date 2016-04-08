@@ -1,54 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    >
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:padding="0dp"
             android:id="@+id/poi_detail_image"
-            android:scaleType="fitCenter" />
+            android:scaleType="fitXY" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/poi_detail_image"
             android:id="@+id/poi_detail_name"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="20dp" />
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="20dp"
+            android:textSize="13pt"
+            android:textStyle="bold"
+            style="@style/ListItemText"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:fontFamily="Roboto-medium"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/poi_detail_name"
             android:id="@+id/poi_detail_location"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="5dp"
+            android:textSize="9pt"
+            android:textStyle="italic"
+            style="@style/ListItemTextInfo"
+            android:paddingLeft="20dp" />
 
         <RatingBar
-            android:layout_width="200dp"
-            android:layout_height="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/poi_detail_ratingBar"
-            android:layout_below="@+id/poi_detail_name"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="20dp"
-            android:numStars="5"/>
+            android:layout_below="@+id/poi_detail_location"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:numStars="5"
+            android:stepSize="0.1"/>
 
         <TextView
-            android:layout_width="300dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/poi_detail_location"
+            android:layout_toRightOf="@id/poi_detail_ratingBar"
+            android:id="@+id/poi_detail_ratingScore"
+            android:textSize="12dp"
+            android:text="111"
+            android:paddingRight="10dp"
+            android:textStyle="italic"
+            android:textColor="@color/grey"
+            android:layout_marginTop="5dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/poi_detail_location"
+            android:layout_toRightOf="@id/poi_detail_ratingScore"
+            android:id="@+id/poi_detail_ratingTimes"
+            android:textSize="12dp"
+            android:text="111"
+            android:paddingRight="10dp"
+            android:textStyle="italic"
+            android:textColor="@color/grey"
+            android:layout_marginTop="5dp"/>
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Description"
-            android:id="@+id/poi_detail_description"
+            android:id="@+id/description"
             android:layout_centerVertical="true"
             android:layout_below="@+id/poi_detail_ratingBar"
             android:layout_alignStart="@+id/poi_detail_ratingBar"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="30dp"
+            style="@style/ListItemTextInfo"
+            android:textSize="10pt"
+            android:textColor="@color/grey"
+            android:textStyle="bold|italic"
+            android:fontFamily="sans-serif-medium"
+            android:paddingTop="10dp"
+            />
+
+
+        <TextView
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:text="111"
+            android:id="@+id/poi_detail_description"
+            android:layout_centerVertical="true"
+            android:layout_below="@+id/description"
+            android:layout_alignStart="@+id/description"
+            android:layout_marginTop="5dp"
+            style="@style/ListItemTextInfo"
+            android:textSize="7pt"
+            android:textColor="@color/grey"
+            android:textStyle="normal"
+            android:fontFamily="sans-serif"
+            android:paddingBottom="50dp"
+            />
 
     </RelativeLayout>
-
-
-
+    </ScrollView>
 </LinearLayout>
