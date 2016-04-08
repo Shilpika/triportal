@@ -3,19 +3,15 @@ package edu.purdue.cs;
 import com.parse.*;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 @ParseClassName("Itinerary")
 public class Itinerary extends ParseObject {
-    private Itinerary _fork() {
-        Itinerary itinerary = new Itinerary();
-        Set<String> keys = this.keySet();
-        for (String key : keys) {
-            itinerary.put(key, this.get(key));
-        }
-        itinerary.setOwner(ParseUser.getCurrentUser());
-        return itinerary;
+    private HashMap<String, Object> _fork() {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("id", this.getObjectId());
+        return params;
     }
 
     private ParseQuery<Day> _getDays() {
@@ -99,42 +95,25 @@ public class Itinerary extends ParseObject {
         return query.find();
     }
 
-    public Itinerary forkInBackground(final SaveCallback callback) {
-        final Itinerary itinerary = _fork();
-        itinerary.saveInBackground(new SaveCallback() {
+    public void forkInBackground(final FunctionCallback<Itinerary> callback) {
+        ParseCloud.callFunctionInBackground("fork_itinerary", _fork(), new FunctionCallback<String>() {
             @Override
-            public void done(ParseException e) {
-                itinerary.getDaysInBackground(new FindCallback<Day>() {
-                    @Override
-                    public void done(List<Day> days, ParseException e) {
-                        final Integer[] daysFinished = {0};
-                        final Integer numberOfDays = itinerary.getNumberOfDays();
-                        for (Day day: days) {
-                            day.forkInBackground(itinerary, new SaveCallback() {
-                                @Override
-                                public void done(ParseException e) {
-                                    daysFinished[0]++;
-                                    if ( daysFinished[0] == numberOfDays ) {
-                                        callback.done(null);
-                                    }
-                                }
-                            });
-                        }
-                    }
-                });
+            public void done(String objectId, ParseException e) {
+                try {
+                    ParseQuery<Itinerary> query = ParseQuery.getQuery(Itinerary.class);
+                    Itinerary itinerary = query.get(objectId);
+                    callback.done(itinerary, null);
+                } catch (ParseException err) {
+                    callback.done(null, err);
+                }
             }
         });
-        return itinerary;
     }
 
     public Itinerary fork() throws ParseException {
-        Itinerary itinerary = _fork();
-        itinerary.save();
-        List<Day> days = itinerary.getDays();
-        for (Day day: days) {
-            day.fork(itinerary);
-        }
-        return itinerary;
+        String objectId = (String) ParseCloud.callFunction("fork_itinerary", _fork());
+        ParseQuery<Itinerary> query = ParseQuery.getQuery(Itinerary.class);
+        return query.get(objectId);
     }
 
     static public Itinerary getById(String id) throws ParseException {
