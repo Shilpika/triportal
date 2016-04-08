@@ -24,6 +24,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -298,8 +299,23 @@ public class BoardView extends HorizontalScrollView implements AutoScroller.Auto
         }
         return 0;
     }
+    public int getCurrentColumn() {
+        int tPosX = getScrollX();
 
-    private int getClosestColumn() {
+        Log.d("Board", "getScrollX"+ getScrollX());
+
+        for (int i = 0; i < mLists.size(); i++) {
+            View list = mHeaders.get(i);
+           // View parent = (View) list.getParent();
+            if (list.getLeft() <= tPosX && list.getRight() > tPosX) {
+                //Log.d("tag","sdf");
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    public int getClosestColumn() {
         int middlePosX = getScrollX() + getMeasuredWidth() / 2;
         int column = 0;
         int minDiffX = Integer.MAX_VALUE;
@@ -378,7 +394,17 @@ public class BoardView extends HorizontalScrollView implements AutoScroller.Auto
             DragItemAdapter adapter = (DragItemAdapter) mLists.get(column).getAdapter();
             adapter.addItem(row, item);
             if (scrollToItem) {
-                scrollToItem(column, row, false);
+                scrollToItem(column, row, true);
+            }
+        }
+    }
+
+    public void addItemtoEnd(int column, Object item, boolean scrollToItem) {
+        if (!isDragging() && mLists.size() > column) {
+            DragItemAdapter adapter = (DragItemAdapter) mLists.get(column).getAdapter();
+            adapter.addItemToEnd(item);
+            if (scrollToItem) {
+                scrollToItem(column, adapter.getItemCount() - 1, true);
             }
         }
     }
@@ -391,7 +417,7 @@ public class BoardView extends HorizontalScrollView implements AutoScroller.Auto
             adapter = (DragItemAdapter) mLists.get(toColumn).getAdapter();
             adapter.addItem(toRow, item);
             if (scrollToItem) {
-                scrollToItem(toColumn, toRow, false);
+                scrollToItem(toColumn, toRow, true);
             }
         }
     }
@@ -435,6 +461,7 @@ public class BoardView extends HorizontalScrollView implements AutoScroller.Auto
 
     public void scrollToColumn(int column, boolean animate) {
         if (mLists.size() <= column) {
+            Log.d("Scroll To", column + "Number Lager than " +mLists.size());
             return;
         }
 
@@ -453,6 +480,7 @@ public class BoardView extends HorizontalScrollView implements AutoScroller.Auto
             }
         }
     }
+
 
     public void clearBoard() {
         int count = mLists.size();

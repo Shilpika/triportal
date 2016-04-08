@@ -56,6 +56,10 @@ public abstract class DragItemAdapter<T, VH extends DragItemAdapter.ViewHolder> 
         return null;
     }
 
+    public void addItemToEnd(T item) {
+        addItem(mItemList.size(),item);
+    }
+
     public void addItem(int pos, T item) {
         if (mItemList != null && mItemList.size() >= pos) {
             mItemList.add(pos, item);

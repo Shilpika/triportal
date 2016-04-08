@@ -112,8 +112,10 @@ public class SharedItineraryListFragment extends TabFragment {
         Itinerary.getSharedItineraryListInBackground(new FindCallback<Itinerary>() {
             @Override
             public void done(List<Itinerary> objects, ParseException e) {
+                if(objects == null) return;
                 itineraryList = objects;
                 SharedItineraryListAdapter adapter = (SharedItineraryListAdapter) tripList.getAdapter();
+                if(adapter == null) return;
                 adapter.updateList(itineraryList);
                 adapter.notifyDataSetChanged();
             }

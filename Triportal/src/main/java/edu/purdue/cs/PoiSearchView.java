@@ -29,12 +29,14 @@ public class PoiSearchView extends AppCompatActivity implements AdapterView.OnIt
     private SearchView mSearchView;
     private ListView mSearchResults;
     private PoiListAdapter mResultsAdapter;
+    private int mColIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_view);
 
+        mColIndex = getIntent().getExtras().getInt("ClickedColumn");
         mSearchView = (SearchView) findViewById(R.id.search_view);
         setupSearchView();
 
@@ -120,6 +122,7 @@ public class PoiSearchView extends AppCompatActivity implements AdapterView.OnIt
                 String poi_id = data.getStringExtra("poi_id");
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("poi_id", poi_id);
+                returnIntent.putExtra("ClickedColumn",mColIndex);
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }

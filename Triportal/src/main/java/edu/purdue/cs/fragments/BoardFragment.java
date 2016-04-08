@@ -19,6 +19,7 @@ package edu.purdue.cs.fragments;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -34,11 +35,8 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.woxthebox.draglistview.BoardView;
 import com.woxthebox.draglistview.DragItem;
-import edu.purdue.cs.R;
+import edu.purdue.cs.*;
 import edu.purdue.cs.Adapter.BoardAdapter;
-import edu.purdue.cs.Day;
-import edu.purdue.cs.Poi;
-import edu.purdue.cs.Itinerary;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,11 +49,16 @@ public class BoardFragment extends Fragment {
     private int mColumns;
     private Itinerary mItinerary;
     private List<Day> mDayList;
+    private List<View> mHeaderList;
     private ImageButton mAddBtn;
     private ImageButton mSearchBtn;
     private Object[] mColumnList;
     private int mInitColumn = 0;
     private Activity mActivity;
+    static final private int SEARCH_REQUEST_CODE = 789;
+
+    //private View tClickedHeader;
+    private int mlastClickedColumn = 0;
     //private ImageButton imageB
 
     public static BoardFragment newInstance() {
@@ -75,11 +78,21 @@ public class BoardFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if(mlastClickedColumn == mColumns -1) {
+            scrollToEnd();
+        }
+        mBoardView.scrollToColumn(mlastClickedColumn,false);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.board_layout, container, false);
         mAddBtn = (ImageButton) view.findViewById(R.id.board_create_btn);
         mSearchBtn = (ImageButton) view.findViewById(R.id.board_search_btn);
-        //TODO: set up listener for Button
+        //TODO: temporarily change to invisible due to workaround
+        mSearchBtn.setVisibility(View.GONE);
         mBoardView = (BoardView) view.findViewById(R.id.board_view);
         mBoardView.setSnapToColumnsWhenScrolling(true);
         mBoardView.setSnapToColumnWhenDragging(true);
@@ -147,8 +160,16 @@ public class BoardFragment extends Fragment {
         mAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Add Day", Toast.LENGTH_SHORT).show();
+              //  int currentColumn = mBoardView.getCurrentColumn();
+               // Toast.makeText(getContext(), "Add Day to Col " + currentColumn, Toast.LENGTH_SHORT).show();
+                addColumnList(new ArrayList<Poi>());
 
+                //mBoardView.scrollToColumn(0,true );
+//                try {
+//                    mItinerary.addOneDay();
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
             }
         });
 
@@ -181,6 +202,7 @@ public class BoardFragment extends Fragment {
                 initiDayList();
             }
         });
+
 
 
 
@@ -230,6 +252,7 @@ public class BoardFragment extends Fragment {
     }
 
     private void initiDayList() {
+        mHeaderList =  new ArrayList<>();
         mColumnList = new Object[mDayList.size()];
         mInitColumn = mDayList.size();
         mColumns = 0;
@@ -261,27 +284,23 @@ public class BoardFragment extends Fragment {
         //TODO: this adapter need to be refine to fit in out project
         final BoardAdapter listAdapter = new BoardAdapter(mItemArray, R.layout.board_item, R.id.board_item_layout, true,this);
         final View header = View.inflate(mActivity, R.layout.board_column_header, null);
+        mHeaderList.add(header);
         ((TextView) header.findViewById(R.id.board_header_text)).setText("Day " + (mColumns + 1));
         ((TextView) header.findViewById(R.id.board_header_text_2)).setText("" + PoiList.size());
         header.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO: click on the title to add another POI in day; we still need a place to add day
-                //Toast.makeText(getContext(), "Add Poi", Toast.LENGTH_SHORT).show();
-                //clicking this will direct the user to search screen to add POI
-               // long id = sCreatedItems++;
-               // Pair item = new Pair<>(id, "Test " + id);
-                //mBoardView.addItem(column, 0, item, true);
-                //mBoardView.moveItem(4, 0, 0, true);
-                //mBoardView.removeItem(column, 0);
-                //mBoardView.moveItem(0, 0, 1, 3, false);
-                //mBoardView.replaceItem(0, 0, item1, true);
-               // ((TextView) header.findViewById(R.id.board_header_text_2)).setText("" + mItemArray.size());
+                Intent intent = new Intent(getActivity(), PoiSearchView.class);
+                intent.putExtra("ClickedColumn", column);
+                startActivityForResult(intent,SEARCH_REQUEST_CODE);
             }
         });
 
         mBoardView.addColumnList(listAdapter, header, false);
         mColumns++;
+      //  mBoardView.scrollToColumn(mColumns-2,true);
+        scrollToEnd();
     }
 
     private void addColumnList(List<Poi> PoiList, int index) {
@@ -299,36 +318,88 @@ public class BoardFragment extends Fragment {
         //TODO: this adapter need to be refine to fit in out project
         final BoardAdapter listAdapter = new BoardAdapter(mItemArray, R.layout.board_item, R.id.board_item_layout, true,this);
         final View header = View.inflate(mActivity, R.layout.board_column_header, null);
+        mHeaderList.add(header);
         ((TextView) header.findViewById(R.id.board_header_text)).setText("Day " + (index + 1));
         ((TextView) header.findViewById(R.id.board_header_text_2)).setText("" + PoiList.size());
-        header.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO: click on the title to add another POI in day; we still need a place to add day
-                Toast.makeText(getContext(), "Add Poi", Toast.LENGTH_SHORT).show();
 
-                //clicking this will direct the user to search screen to add POI
-               // long id = sCreatedItems++;
-               // Pair item = new Pair<>(id, "Test " + id);
-                //mBoardView.addItem(column, 0, item, true);
-                //mBoardView.moveItem(4, 0, 0, true);
-                //mBoardView.removeItem(column, 0);
-                //mBoardView.moveItem(0, 0, 1, 3, false);
-                //mBoardView.replaceItem(0, 0, item1, true);
-               // ((TextView) header.findViewById(R.id.board_header_text_2)).setText("" + mItemArray.size());
-            }
-        });
 
         //mBoardView.addColumnList(listAdapter, header, false);
         mColumnList[index] = new Pair<>(listAdapter,header);
         mColumns++;
 
     }
+
+    private void scrollToEnd() {
+        mBoardView.post(new Runnable() {
+            @Override
+            public void run() {
+                mBoardView.fullScroll(ScrollView.FOCUS_RIGHT);
+            }
+        });
+    }
     @SuppressWarnings("unchecked")
     private void onFinishInitList() {
+        int column = 0;
         for(Object o : mColumnList) {
+            final int final_column = column;
             Pair<BoardAdapter,View> pair = (Pair<BoardAdapter,View>) o;
+            pair.second.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //TODO: click on the title to add another POI in day; we still need a place to add day
+                    Log.d("Clicked Header ","" + final_column);
+
+
+                    Intent intent = new Intent(getActivity(), PoiSearchView.class);
+                    intent.putExtra("ClickedColumn", final_column);
+                    startActivityForResult(intent,SEARCH_REQUEST_CODE);
+
+                }
+            });
             mBoardView.addColumnList(pair.first,pair.second,false);
+            column++;
+        }
+
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == SEARCH_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                String poi_id = data.getStringExtra("poi_id");
+                int tClickedColumn = data.getExtras().getInt("ClickedColumn");
+                Poi poi;
+                try {
+                    poi = Poi.getById(poi_id);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    return;
+                }
+                long id = sCreatedItems++;
+                Pair<Long,Poi> item = new Pair<>(id, poi);
+                Log.d("onActivityResult Column","" + tClickedColumn);
+                mBoardView.addItemtoEnd(tClickedColumn, item, false);
+                BoardAdapter adapter = (BoardAdapter)  mBoardView.getAdapter(tClickedColumn);
+                ((TextView) mHeaderList.get(tClickedColumn).findViewById(R.id.board_header_text_2)).setText("" + adapter.getItemCount());
+                Log.d("onActivityResult Column","" + tClickedColumn);
+               // mBoardView.scrollToColumnWithUpdate(tClickedColumn,true);
+                mlastClickedColumn = tClickedColumn;
+                mBoardView.scrollToColumn(tClickedColumn,false);
+                List<Pair<Long,Poi>> pairList = adapter.getItemList();
+                List<Poi> newPoiList = new ArrayList<Poi>();
+
+
+
+                for(Pair<Long,Poi> pair : pairList) {
+                    newPoiList.add(pair.second);
+                }
+
+                try {
+                    mDayList.get(tClickedColumn).setPoiList(newPoiList);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }
         }
     }
 
