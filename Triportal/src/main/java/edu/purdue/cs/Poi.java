@@ -2,8 +2,12 @@ package edu.purdue.cs;
 
 import com.parse.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @ParseClassName("Poi")
 public class Poi extends ParseObject {
+
     public Poi() {
         super();
     }
@@ -40,6 +44,31 @@ public class Poi extends ParseObject {
 
     public String getImage() {
         return getString("image");
+    }
+
+    private ParseQuery<Poi> _search(String input) {
+        ParseQuery<Poi> locationStringQuery = ParseQuery.getQuery(Poi.class);
+        ParseQuery<Poi> nameQuery = ParseQuery.getQuery(Poi.class);
+        locationStringQuery.whereMatches("location_string", input, "i");
+        nameQuery.whereMatches("name", input, "i");
+        List<ParseQuery<Poi>> queries = new ArrayList<>();
+        queries.add(locationStringQuery);
+        queries.add(nameQuery);
+        ParseQuery<Poi> mainQuery = ParseQuery.or(queries);
+        mainQuery.orderByDescending("num_reviews,rating");
+        mainQuery.addAscendingOrder("name");
+        mainQuery.setLimit(50);
+        return mainQuery;
+    }
+
+    public void searchInBackground(String input, FindCallback<Poi> callback) {
+        ParseQuery<Poi> query = _search(input);
+        query.findInBackground(callback);
+    }
+
+    public List<Poi> search(String input) throws ParseException {
+        ParseQuery<Poi> query = _search(input);
+        return query.find();
     }
 
     public ParseGeoPoint getGeoPoint() {
