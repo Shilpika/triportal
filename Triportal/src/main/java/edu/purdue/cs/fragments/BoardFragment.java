@@ -17,6 +17,7 @@
 package edu.purdue.cs.fragments;
 
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,9 +28,7 @@ import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.*;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.FrameLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.woxthebox.draglistview.BoardView;
@@ -41,6 +40,7 @@ import edu.purdue.cs.Poi;
 import edu.purdue.cs.Itinerary;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class BoardFragment extends Fragment {
@@ -50,11 +50,21 @@ public class BoardFragment extends Fragment {
     private int mColumns;
     private Itinerary mItinerary;
     private List<Day> mDayList;
+    private ImageButton mAddBtn;
+    private Object[] mColumnList;
+    private int mInitColumn = 0;
+    private Activity mActivity;
 
     public static BoardFragment newInstance() {
         return new BoardFragment();
     }
 
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = activity;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +74,8 @@ public class BoardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.board_layout, container, false);
-
+        mAddBtn = (ImageButton) view.findViewById(R.id.board_create_btn);
+        //TODO: set up listener for Button
         mBoardView = (BoardView) view.findViewById(R.id.board_view);
         mBoardView.setSnapToColumnsWhenScrolling(true);
         mBoardView.setSnapToColumnWhenDragging(true);
@@ -162,11 +173,17 @@ public class BoardFragment extends Fragment {
     }
 
     private void initiDayList() {
-        for(Day tDay : mDayList) {
+        mColumnList = new Object[mDayList.size()];
+        mInitColumn = mDayList.size();
+        mColumns = 0;
+        for(final Day tDay : mDayList) {
             tDay.getPoiListInBackground(new FindCallback<Poi>() {
                 @Override
                 public void done(List<Poi> objects, ParseException e) {
-                    addColumnList(objects);
+                    addColumnList(objects,tDay.getDayIndex());
+                    if(mColumns == mInitColumn) {
+                        onFinishInitList();
+                    }
                 }
             });
         }
@@ -186,7 +203,7 @@ public class BoardFragment extends Fragment {
         final int column = mColumns;
         //TODO: this adapter need to be refine to fit in out project
         final BoardAdapter listAdapter = new BoardAdapter(mItemArray, R.layout.board_item, R.id.board_item_layout, true,this);
-        final View header = View.inflate(getActivity(), R.layout.board_column_header, null);
+        final View header = View.inflate(mActivity, R.layout.board_column_header, null);
         ((TextView) header.findViewById(R.id.board_header_text)).setText("Day " + (mColumns + 1));
         ((TextView) header.findViewById(R.id.board_header_text_2)).setText("" + PoiList.size());
         header.setOnClickListener(new View.OnClickListener() {
@@ -207,6 +224,52 @@ public class BoardFragment extends Fragment {
 
         mBoardView.addColumnList(listAdapter, header, false);
         mColumns++;
+    }
+
+    private void addColumnList(List<Poi> PoiList, int index) {
+        //TODO: turn this into adding days
+
+        final ArrayList<Pair<Long, Poi>> mItemArray = new ArrayList<>(PoiList.size());
+        //The initial items in a day should be zero
+
+        for(Poi poi : PoiList) {
+            long id = sCreatedItems++;
+            mItemArray.add(new Pair<>(id, poi));
+        }
+
+        final int column = mColumns;
+        //TODO: this adapter need to be refine to fit in out project
+        final BoardAdapter listAdapter = new BoardAdapter(mItemArray, R.layout.board_item, R.id.board_item_layout, true,this);
+        final View header = View.inflate(mActivity, R.layout.board_column_header, null);
+        ((TextView) header.findViewById(R.id.board_header_text)).setText("Day " + (index + 1));
+        ((TextView) header.findViewById(R.id.board_header_text_2)).setText("" + PoiList.size());
+        header.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: click on the title to add another POI in day; we still need a place to add day
+                //clicking this will direct the user to search screen to add POI
+               // long id = sCreatedItems++;
+               // Pair item = new Pair<>(id, "Test " + id);
+                //mBoardView.addItem(column, 0, item, true);
+                //mBoardView.moveItem(4, 0, 0, true);
+                //mBoardView.removeItem(column, 0);
+                //mBoardView.moveItem(0, 0, 1, 3, false);
+                //mBoardView.replaceItem(0, 0, item1, true);
+               // ((TextView) header.findViewById(R.id.board_header_text_2)).setText("" + mItemArray.size());
+            }
+        });
+
+        //mBoardView.addColumnList(listAdapter, header, false);
+        mColumnList[index] = new Pair<>(listAdapter,header);
+        mColumns++;
+
+    }
+    @SuppressWarnings("unchecked")
+    private void onFinishInitList() {
+        for(Object o : mColumnList) {
+            Pair<BoardAdapter,View> pair = (Pair<BoardAdapter,View>) o;
+            mBoardView.addColumnList(pair.first,pair.second,false);
+        }
     }
 
     private static class MyDragItem extends DragItem {

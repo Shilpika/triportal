@@ -32,6 +32,7 @@ public class DayListView extends AppCompatActivity{
     private ListView poilist;
 
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
