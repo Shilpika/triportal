@@ -46,7 +46,7 @@ public class Poi extends ParseObject {
         return getString("image");
     }
 
-    private ParseQuery<Poi> _search(String input) {
+    private static ParseQuery<Poi> _search(String input) {
         ParseQuery<Poi> locationStringQuery = ParseQuery.getQuery(Poi.class);
         ParseQuery<Poi> nameQuery = ParseQuery.getQuery(Poi.class);
         locationStringQuery.whereMatches("location_string", input, "i");
@@ -66,7 +66,7 @@ public class Poi extends ParseObject {
         query.findInBackground(callback);
     }
 
-    public List<Poi> search(String input) throws ParseException {
+    public static List<Poi> search(String input) throws ParseException {
         ParseQuery<Poi> query = _search(input);
         return query.find();
     }

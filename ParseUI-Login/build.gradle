@@ -4,7 +4,7 @@ version = "0.0.1"
 group = 'com.parse'
 
 dependencies {
-    compile rootProject.ext.androidSupport
+    provided rootProject.ext.androidSupport
     compile rootProject.ext.parse
 
     provided rootProject.ext.facebookSDK
