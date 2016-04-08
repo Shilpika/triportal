@@ -173,6 +173,7 @@ public class BoardFragment extends Fragment {
                             e1.printStackTrace();
                             return;
                         }
+                        BoardFragment.this.mDayList.add(day);
                         BoardFragment.this.addColumnList(poiList);
                     }
                 });
