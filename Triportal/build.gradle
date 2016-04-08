@@ -9,8 +9,9 @@ dependencies {
     compile rootProject.ext.parseFacebookUtils
     compile rootProject.ext.parseTwitterUtils
     compile rootProject.ext.facebookSDK
-    compile rootProject.ext.DragListView
+    //.compile rootProject.ext.DragListView
     compile project(':ParseUI-Login')
+    compile project(':DragListView')
 }
 
 android {
@@ -36,5 +37,5 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    buildToolsVersion '23.0.2'
+    buildToolsVersion '23.0.3'
 }

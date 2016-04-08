@@ -25,6 +25,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.CardView;
+
 import android.util.Log;
 import android.view.*;
 import android.view.animation.DecelerateInterpolator;
@@ -147,6 +148,7 @@ public class BoardFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getContext(), "Add Day", Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -383,5 +385,8 @@ public class BoardFragment extends Fragment {
             anim.setDuration(ANIMATION_DURATION);
             anim.start();
         }
+
     }
+
+
 }
