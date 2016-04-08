@@ -30,11 +30,13 @@ public class Day extends ParseObject {
     public ArrayList<String> getPoiOrder() {
         JSONArray array = getJSONArray("poiOrder");
         ArrayList<String> poiOrder = new ArrayList<>();
-        for (int i = 0; i < array.length(); i++) {
-            try {
-                poiOrder.add(array.getString(i));
-            } catch (JSONException e) {
-                e.printStackTrace();
+        if (array != null) {
+            for (int i = 0; i < array.length(); i++) {
+                try {
+                    poiOrder.add(array.getString(i));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return poiOrder;

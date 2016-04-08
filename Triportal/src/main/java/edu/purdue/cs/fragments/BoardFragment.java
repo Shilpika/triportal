@@ -32,6 +32,7 @@ import android.view.*;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.*;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.woxthebox.draglistview.BoardView;
 import com.woxthebox.draglistview.DragItem;
@@ -162,7 +163,19 @@ public class BoardFragment extends Fragment {
             public void onClick(View v) {
               //  int currentColumn = mBoardView.getCurrentColumn();
                // Toast.makeText(getContext(), "Add Day to Col " + currentColumn, Toast.LENGTH_SHORT).show();
-                addColumnList(new ArrayList<Poi>());
+                mItinerary.addOneDayInBackground(new GetCallback<Day>() {
+                    @Override
+                    public void done(Day day, ParseException e) {
+                        List<Poi> poiList;
+                        try {
+                            poiList = day.getPoiList();
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                            return;
+                        }
+                        BoardFragment.this.addColumnList(poiList);
+                    }
+                });
 
                 //mBoardView.scrollToColumn(0,true );
 //                try {
