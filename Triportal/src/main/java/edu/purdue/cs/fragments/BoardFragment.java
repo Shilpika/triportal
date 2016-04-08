@@ -51,9 +51,11 @@ public class BoardFragment extends Fragment {
     private Itinerary mItinerary;
     private List<Day> mDayList;
     private ImageButton mAddBtn;
+    private ImageButton mSearchBtn;
     private Object[] mColumnList;
     private int mInitColumn = 0;
     private Activity mActivity;
+    //private ImageButton imageB
 
     public static BoardFragment newInstance() {
         return new BoardFragment();
@@ -75,6 +77,7 @@ public class BoardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.board_layout, container, false);
         mAddBtn = (ImageButton) view.findViewById(R.id.board_create_btn);
+        mSearchBtn = (ImageButton) view.findViewById(R.id.board_search_btn);
         //TODO: set up listener for Button
         mBoardView = (BoardView) view.findViewById(R.id.board_view);
         mBoardView.setSnapToColumnsWhenScrolling(true);
@@ -96,14 +99,66 @@ public class BoardFragment extends Fragment {
             }
 
             @Override
+            @SuppressWarnings("unchecked")
             public void onItemDragEnded(int fromColumn, int fromRow, int toColumn, int toRow) {
                 if (fromColumn != toColumn || fromRow != toRow) {
+                    List<Pair<Long,Poi>> listFrom =  mBoardView.getAdapter(fromColumn).getItemList();
+                    List<Pair<Long,Poi>> listTo =  mBoardView.getAdapter(toColumn).getItemList();
+                    List<Poi> newPoiList = new ArrayList<Poi>(listFrom.size() + listTo.size());
+
+
+
+                    for(Pair<Long,Poi> pair : listFrom) {
+                        newPoiList.add(pair.second);
+                    }
+
+                    try {
+                        mDayList.get(fromColumn).setPoiList(newPoiList);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    if(fromColumn == toColumn)
+                        return;
+                    newPoiList.clear();
+                    for(Pair<Long,Poi> pair : listTo) {
+                        newPoiList.add(pair.second);
+                    }
+                    //newPoiList.add(toRow,tPoi);
+                    try {
+                        mDayList.get(toColumn).setPoiList(newPoiList);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+
                     //Toast.makeText(mBoardView.getContext(), "End - column: " + toColumn + " row: " + toRow, Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+        setupButtonListener();
+
+
         return view;
     }
+
+    private void setupButtonListener() {
+        mAddBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Add Day", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mSearchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Add Poi", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
 
     @Override
     public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
@@ -210,6 +265,7 @@ public class BoardFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //TODO: click on the title to add another POI in day; we still need a place to add day
+                //Toast.makeText(getContext(), "Add Poi", Toast.LENGTH_SHORT).show();
                 //clicking this will direct the user to search screen to add POI
                // long id = sCreatedItems++;
                // Pair item = new Pair<>(id, "Test " + id);
@@ -247,6 +303,8 @@ public class BoardFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //TODO: click on the title to add another POI in day; we still need a place to add day
+                Toast.makeText(getContext(), "Add Poi", Toast.LENGTH_SHORT).show();
+
                 //clicking this will direct the user to search screen to add POI
                // long id = sCreatedItems++;
                // Pair item = new Pair<>(id, "Test " + id);

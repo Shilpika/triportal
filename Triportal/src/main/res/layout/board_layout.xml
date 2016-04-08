@@ -13,16 +13,32 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@drawable/list_item"
+              android:background="@color/super_light_grey"
               android:orientation="vertical">
+
+
     <com.woxthebox.draglistview.BoardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/board_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
+    <ImageButton
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:src="@drawable/ic_search"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="88dp"
+        android:tint="@android:color/white"
+        android:id="@+id/board_search_btn"
+        android:elevation="1dp"
+        android:background="@drawable/ribble"
+        android:stateListAnimator="@anim/fab_anim"/>
 
     <ImageButton
         android:layout_width="56dp"
@@ -38,4 +54,5 @@
         android:background="@drawable/ribble"
         android:stateListAnimator="@anim/fab_anim"/>
 
-</LinearLayout>
+
+</RelativeLayout>

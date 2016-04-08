@@ -99,10 +99,12 @@ public class Day extends ParseObject {
                 relation.remove(poi);
             }
         }
-        remove("poiList");
-        add("poiList", relation);
-        remove("poiOrder");
-        add("poiOrder", poiOrder);
+//        remove("poiList");
+//        add("poiList", relation);
+        removeAll("poiOrder", getPoiOrder());
+        save();
+        addAllUnique("poiOrder", poiOrder);
+        save();
     }
 
     public void setItinerary(Itinerary itinerary) {
