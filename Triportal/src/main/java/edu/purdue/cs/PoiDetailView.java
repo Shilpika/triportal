@@ -1,7 +1,6 @@
 package edu.purdue.cs;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;

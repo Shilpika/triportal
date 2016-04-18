@@ -20,4 +20,6 @@
         android:id="@+id/poi_detail_frame">
 
     </FrameLayout>
+
+
 </LinearLayout>
