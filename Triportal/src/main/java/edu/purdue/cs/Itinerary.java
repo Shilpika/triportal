@@ -2,6 +2,7 @@ package edu.purdue.cs;
 
 import com.parse.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -68,7 +69,7 @@ public class Itinerary extends ParseObject {
         put("owner", user);
     }
 
-    public Integer getNumberOfDays() {
+    public int getNumberOfDays() {
         return getInt("numberOfDays");
     }
 
@@ -98,15 +99,16 @@ public class Itinerary extends ParseObject {
     public void addOneDayInBackground(final GetCallback<Day> callback) {
         final Itinerary thisItinerary = this;
         final Day day = new Day();
-        day.add("itinerary", this);
-        day.add("dayIndex", getNumberOfDays());
+        day.put("itinerary", this);
+        day.put("dayIndex", getNumberOfDays());
+        day.put("poiOrder", new ArrayList<String>());
         day.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e != null)
                     callback.done(null, e);
                 else {
-                    thisItinerary.increment("numOfDays");
+                    thisItinerary.increment("numberOfDays");
                     thisItinerary.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
@@ -122,8 +124,9 @@ public class Itinerary extends ParseObject {
         final Day day = new Day();
         day.add("itinerary", this);
         day.add("dayIndex", getNumberOfDays());
+        day.put("poiOrder", new ArrayList<String>());
         day.save();
-        increment("numOfDays");
+        increment("numberOfDays");
         save();
         return day;
     }
@@ -159,7 +162,7 @@ public class Itinerary extends ParseObject {
                     callback.done(err);
                     return;
                 }
-                thisItinerary.increment("numOfDays", -1);
+                thisItinerary.increment("numberOfDays", -1);
                 thisItinerary.saveInBackground(callback);
             }
         });
@@ -181,7 +184,7 @@ public class Itinerary extends ParseObject {
                 day.save();
             }
         }
-        increment("numOfDays", -1);
+        increment("numberOfDays", -1);
         save();
     }
 

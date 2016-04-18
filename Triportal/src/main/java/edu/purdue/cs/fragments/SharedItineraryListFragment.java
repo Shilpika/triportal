@@ -101,20 +101,21 @@ public class SharedItineraryListFragment extends TabFragment {
             @Override
             public void done(List<Itinerary> objects, ParseException e) {
                 itineraryList = objects;
+                // assert(itineraryList.size() != 0);
+                tripList.setAdapter(createAdapter());
+                tripList.setOnItemClickListener(new ListItemClickListener());
             }
         });
-        // assert(itineraryList.size() != 0);
-        tripList.setAdapter(createAdapter());
-        tripList.setOnItemClickListener(new ListItemClickListener());
-
     }
 
     private void refreshList() {
         Itinerary.getSharedItineraryListInBackground(new FindCallback<Itinerary>() {
             @Override
             public void done(List<Itinerary> objects, ParseException e) {
+                if(objects == null) return;
                 itineraryList = objects;
                 SharedItineraryListAdapter adapter = (SharedItineraryListAdapter) tripList.getAdapter();
+                if(adapter == null) return;
                 adapter.updateList(itineraryList);
                 adapter.notifyDataSetChanged();
             }

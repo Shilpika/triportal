@@ -30,11 +30,13 @@ public class Day extends ParseObject {
     public ArrayList<String> getPoiOrder() {
         JSONArray array = getJSONArray("poiOrder");
         ArrayList<String> poiOrder = new ArrayList<>();
-        for (int i = 0; i < array.length(); i++) {
-            try {
-                poiOrder.add(array.getString(i));
-            } catch (JSONException e) {
-                e.printStackTrace();
+        if (array != null) {
+            for (int i = 0; i < array.length(); i++) {
+                try {
+                    poiOrder.add(array.getString(i));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return poiOrder;
@@ -99,10 +101,12 @@ public class Day extends ParseObject {
                 relation.remove(poi);
             }
         }
-        remove("poiList");
-        add("poiList", relation);
-        remove("poiOrder");
-        add("poiOrder", poiOrder);
+//        remove("poiList");
+//        add("poiList", relation);
+        removeAll("poiOrder", getPoiOrder());
+        save();
+        addAllUnique("poiOrder", poiOrder);
+        save();
     }
 
     public void setItinerary(Itinerary itinerary) {

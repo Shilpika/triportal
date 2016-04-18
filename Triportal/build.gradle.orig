@@ -9,9 +9,13 @@ dependencies {
     compile rootProject.ext.parseFacebookUtils
     compile rootProject.ext.parseTwitterUtils
     compile rootProject.ext.facebookSDK
+    //.compile rootProject.ext.DragListView
     compile project(':ParseUI-Login')
+<<<<<<< .merge_file_RBeiY2
     compile 'de.hdodenhof:circleimageview:2.0.0'
+=======
     compile project(':DragListView')
+>>>>>>> .merge_file_a6BBhC
 }
 
 android {
@@ -37,4 +41,5 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    buildToolsVersion '23.0.3'
 }
