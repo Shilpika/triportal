@@ -51,8 +51,12 @@ public class BoardFragment extends Fragment {
     private Itinerary mItinerary;
     private List<Day> mDayList;
     private List<View> mHeaderList;
+
+    private ImageButton mForkBtn;
     private ImageButton mAddBtn;
     private ImageButton mSearchBtn;
+
+
     private Object[] mColumnList;
     private int mInitColumn = 0;
     private Activity mActivity;
@@ -98,6 +102,8 @@ public class BoardFragment extends Fragment {
         View view = inflater.inflate(R.layout.board_layout, container, false);
         mAddBtn = (ImageButton) view.findViewById(R.id.board_create_btn);
         mSearchBtn = (ImageButton) view.findViewById(R.id.board_search_btn);
+        mForkBtn = (ImageButton) view.findViewById(R.id.board_fork_btn);
+
         //TODO: temporarily change to invisible due to workaround
         mSearchBtn.setVisibility(View.GONE);
         mBoardView = (BoardView) view.findViewById(R.id.board_view);
@@ -199,6 +205,13 @@ public class BoardFragment extends Fragment {
                 Toast.makeText(getContext(), "Add Poi", Toast.LENGTH_SHORT).show();
             }
         });
+
+        mForkBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: TO FORK
+            }
+        });
     }
 
 
@@ -218,6 +231,7 @@ public class BoardFragment extends Fragment {
             isOwned = false;
             mBoardView.setDragEnabled(false);
             mAddBtn.setVisibility(View.GONE);
+            mForkBtn.setVisibility(View.VISIBLE);
         } else {
             isOwned = true;
         }
@@ -336,7 +350,9 @@ public class BoardFragment extends Fragment {
 
 
         mBoardView.addColumnList(listAdapter, header, false);
-        mColumnList[column] = new Pair<>(listAdapter,header);
+        List<Object> newColumnList = new ArrayList<>(Arrays.asList(mColumnList));
+        newColumnList.add(new Pair<>(listAdapter,header));
+        mColumnList = newColumnList.toArray();
         mColumns++;
       //  mBoardView.scrollToColumn(mColumns-2,true);
         scrollToEnd();

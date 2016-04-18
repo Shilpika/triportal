@@ -53,6 +53,20 @@
         android:elevation="1dp"
         android:background="@drawable/ribble"
         android:stateListAnimator="@anim/fab_anim"/>
+    <ImageButton
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:src="@drawable/ic_fork"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:tint="@android:color/white"
+        android:id="@+id/board_fork_btn"
+        android:elevation="1dp"
+        android:background="@drawable/ribble"
+        android:stateListAnimator="@anim/fab_anim"
+        android:visibility="gone"/>
 
 
 </RelativeLayout>
