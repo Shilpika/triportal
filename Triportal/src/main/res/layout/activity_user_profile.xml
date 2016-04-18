@@ -15,27 +15,41 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
+
+    <RelativeLayout
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_below="@id/actionBar"
+        android:background="@drawable/background"
+        >
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/avatarView"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            app:civ_border_width="2dp"
+            app:civ_border_color="#FF000000"/>
+
+
+    </RelativeLayout>
+
+
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/light_grey"
         android:text="Choose Image"
         android:id="@+id/chooseImage"
-        android:layout_below="@+id/avatarView"
+        android:layout_below="@+id/background"
         android:layout_alignParentStart="true"
         android:theme="@style/MyButton"
         android:elevation="50dp"
-        android:layout_alignEnd="@+id/avatarView" />
-
-    <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:id="@+id/avatarView"
-        android:scaleType="fitXY"
-        android:background="@color/light_grey"
-        android:layout_below="@+id/actionBar"
-        android:layout_alignParentStart="true" />
-
+        />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,10 +57,10 @@
         android:textColor="@color/black"
         android:text="Username"
         android:id="@+id/userName"
-        android:layout_below="@+id/actionBar"
+        android:layout_below="@+id/background"
         android:paddingLeft="30dp"
         android:paddingTop="15dp"
-        android:layout_toRightOf="@+id/avatarView"
+        android:layout_toRightOf="@+id/chooseImage"
         android:layout_centerHorizontal="true" />
 
     <TextView
@@ -59,7 +73,7 @@
         android:paddingLeft="30dp"
         android:paddingTop="10dp"
         android:layout_below="@+id/userName"
-        android:layout_toEndOf="@+id/avatarView" />
+        android:layout_toEndOf="@+id/chooseImage" />
 
     <Button
         android:layout_width="100dp"

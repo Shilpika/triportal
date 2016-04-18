@@ -50,8 +50,8 @@
     </style>
 
     <style name="MyButton" parent="Theme.AppCompat.Light">
-        <item name="colorControlHighlight">@color/com_parse_ui_facebook_login_button_focus</item>
-        <item name="colorButtonNormal">@color/com_facebook_messenger_blue</item>
+        <item name="colorControlHighlight">@color/light_green</item>
+        <item name="colorButtonNormal">@color/green</item>
     </style>
 
     <!-- Backward-compatible version of ?android:attr/buttonBarButtonStyle -->
