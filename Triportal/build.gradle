@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
 dependencies {
+    compile rootProject.ext.googlePlay
     compile rootProject.ext.androidSupport
     compile rootProject.ext.androidAppCompat
     compile rootProject.ext.androidDesign
