@@ -56,6 +56,9 @@ public class BoardFragment extends Fragment {
     private Object[] mColumnList;
     private int mInitColumn = 0;
     private Activity mActivity;
+
+    private boolean isOwned;
+
     static final private int SEARCH_REQUEST_CODE = 789;
 
     public final static int CONFIRM_POI_DELETE = 1;
@@ -122,7 +125,7 @@ public class BoardFragment extends Fragment {
                 if (fromColumn != toColumn || fromRow != toRow) {
                     List<Pair<Long,Poi>> listFrom =  mBoardView.getAdapter(fromColumn).getItemList();
                     List<Pair<Long,Poi>> listTo =  mBoardView.getAdapter(toColumn).getItemList();
-                    List<Poi> newPoiList = new ArrayList<Poi>(listFrom.size() + listTo.size());
+                    List<Poi> newPoiList = new ArrayList<>(listFrom.size() + listTo.size());
 
 
 
@@ -210,6 +213,15 @@ public class BoardFragment extends Fragment {
         } catch (Exception e) {
             Log.d("BoardFragment", "Itinerary getbyID fail");
         }
+
+        if(!mItinerary.getOwner().getObjectId().equals(bundle.getString("user_ID"))) {
+            isOwned = false;
+            mBoardView.setDragEnabled(false);
+            mAddBtn.setVisibility(View.GONE);
+        } else {
+            isOwned = true;
+        }
+
         //((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Board");
         mItinerary.getDaysInBackground(new FindCallback<Day>() {
             @Override
@@ -299,23 +311,26 @@ public class BoardFragment extends Fragment {
 
         final int column = mColumns;
         //TODO: this adapter need to be refine to fit in out project
-        final BoardAdapter listAdapter = new BoardAdapter(mItemArray, R.layout.board_item, R.id.board_item_layout, true,this);
+        final BoardAdapter listAdapter = new BoardAdapter(mItemArray, R.layout.board_item,
+                                                        R.id.board_item_layout, true,this,isOwned);
         final View header = View.inflate(mActivity, R.layout.board_column_header, null);
         mHeaderList.add(header);
         ((TextView) header.findViewById(R.id.board_header_text)).setText("Day " + (mColumns + 1));
         ((TextView) header.findViewById(R.id.board_header_text_2)).setText("" + PoiList.size());
         //associate the column index to the header to be updated and used by other function
         header.setTag(column);
-        header.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO: click on the title to add another POI in day; we still need a place to add day
-                Intent intent = new Intent(getActivity(), PoiSearchView.class);
-                intent.putExtra("ClickedColumn", (Integer) header.getTag());
-                startActivityForResult(intent,SEARCH_REQUEST_CODE);
-            }
-        });
-        header.setOnLongClickListener(new PopUpMenuListtener(header));
+        if(isOwned) {
+            header.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //TODO: click on the title to add another POI in day; we still need a place to add day
+                    Intent intent = new Intent(getActivity(), PoiSearchView.class);
+                    intent.putExtra("ClickedColumn", (Integer) header.getTag());
+                    startActivityForResult(intent, SEARCH_REQUEST_CODE);
+                }
+            });
+            header.setOnLongClickListener(new PopUpMenuListtener(header));
+        }
 
 
 
@@ -341,7 +356,8 @@ public class BoardFragment extends Fragment {
 
         final int column = mColumns;
         //TODO: this adapter need to be refine to fit in out project
-        final BoardAdapter listAdapter = new BoardAdapter(mItemArray, R.layout.board_item, R.id.board_item_layout, true,this);
+        final BoardAdapter listAdapter = new BoardAdapter(mItemArray, R.layout.board_item,
+                                                        R.id.board_item_layout, true,this,isOwned);
         final View header = View.inflate(mActivity, R.layout.board_column_header, null);
         mHeaderList.add(header);
         ((TextView) header.findViewById(R.id.board_header_text)).setText("Day " + (index + 1));
@@ -405,20 +421,22 @@ public class BoardFragment extends Fragment {
             Pair<BoardAdapter,View> pair = (Pair<BoardAdapter,View>) o;
             pair.second.setTag(final_column);
             final View header = pair.second;
-            pair.second.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //TODO: click on the title to add another POI in day; we still need a place to add day
-                    Log.d("Clicked Header ","" + (Integer) header.getTag());
+            if(isOwned) {
+                pair.second.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //TODO: click on the title to add another POI in day; we still need a place to add day
+                        Log.d("Clicked Header ", "" + (Integer) header.getTag());
 
 
-                    Intent intent = new Intent(getActivity(), PoiSearchView.class);
-                    intent.putExtra("ClickedColumn", (Integer) header.getTag());
-                    startActivityForResult(intent,SEARCH_REQUEST_CODE);
+                        Intent intent = new Intent(getActivity(), PoiSearchView.class);
+                        intent.putExtra("ClickedColumn", (Integer) header.getTag());
+                        startActivityForResult(intent, SEARCH_REQUEST_CODE);
 
-                }
-            });
-            header.setOnLongClickListener(new PopUpMenuListtener(header));
+                    }
+                });
+                header.setOnLongClickListener(new PopUpMenuListtener(header));
+            }
 
             mBoardView.addColumnList(pair.first,pair.second,false);
             column++;
