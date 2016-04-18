@@ -16,6 +16,8 @@
 
 package edu.purdue.cs.fragments;
 
+
+import android.os.Handler;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
@@ -31,10 +33,7 @@ import android.util.Log;
 import android.view.*;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.*;
-import com.parse.FindCallback;
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.SaveCallback;
+import com.parse.*;
 import com.woxthebox.draglistview.BoardView;
 import com.woxthebox.draglistview.DragItem;
 import edu.purdue.cs.*;
@@ -43,6 +42,8 @@ import edu.purdue.cs.Adapter.BoardAdapter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+
 public class BoardFragment extends Fragment {
 
     private static int sCreatedItems = 0;
@@ -55,6 +56,8 @@ public class BoardFragment extends Fragment {
     private ImageButton mForkBtn;
     private ImageButton mAddBtn;
     private ImageButton mSearchBtn;
+
+    private ProgressBar mForkProgress;
 
 
     private Object[] mColumnList;
@@ -103,6 +106,7 @@ public class BoardFragment extends Fragment {
         mAddBtn = (ImageButton) view.findViewById(R.id.board_create_btn);
         mSearchBtn = (ImageButton) view.findViewById(R.id.board_search_btn);
         mForkBtn = (ImageButton) view.findViewById(R.id.board_fork_btn);
+        mForkProgress = (ProgressBar) view.findViewById(R.id.board_fork_btn_progress);
 
         //TODO: temporarily change to invisible due to workaround
         mSearchBtn.setVisibility(View.GONE);
@@ -209,7 +213,21 @@ public class BoardFragment extends Fragment {
         mForkBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mForkBtn.setVisibility(View.GONE);
+                mForkProgress.setVisibility(View.VISIBLE);
                 //TODO: TO FORK
+//                mItinerary.forkInBackground(new FunctionCallback<Itinerary>() {
+//                    @Override
+//                    public void done(Itinerary object, ParseException e) {
+//                        getActivity().finish();
+//                    }
+//                });
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        getActivity().finish();
+                    }
+                },1000);
             }
         });
     }

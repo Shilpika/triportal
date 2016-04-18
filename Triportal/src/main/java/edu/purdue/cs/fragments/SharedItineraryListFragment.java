@@ -19,6 +19,7 @@ package edu.purdue.cs.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +46,7 @@ public class SharedItineraryListFragment extends TabFragment {
      */
 
     private ListView tripList;
+    private ImageButton addBtn;
     private List<Itinerary> itineraryList;
     private Context pContext;
     @Override
@@ -53,6 +55,8 @@ public class SharedItineraryListFragment extends TabFragment {
         View rootView =  inflater.inflate(R.layout.trip_tab, container, false);
         //inflating the card-style list
         tripList = (ListView) rootView.findViewById(R.id.trip_list);
+        addBtn = (ImageButton) rootView.findViewById(R.id.trip_tab_create_i_btn);
+        addBtn.setVisibility(View.GONE);
         setupList();
 
         return rootView;
