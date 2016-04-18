@@ -35,6 +35,7 @@ public class PoiDetailView extends AppCompatActivity {
     private Toolbar toolbar;
     private ListView poilist;
     private String poi_id;
+    private boolean isAdd;
 
 
     @Override
@@ -53,6 +54,7 @@ public class PoiDetailView extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         fragment.setArguments(extras);
         poi_id = extras.getString("poi_id");
+        isAdd = extras.getBoolean("isAdd");
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.poi_detail_frame, fragment, "fragment").commit();
 
@@ -79,7 +81,11 @@ public class PoiDetailView extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_poidetail, menu);
+        if(isAdd == true) {
+            getMenuInflater().inflate(R.menu.menu_poidetail, menu);
+        } else {
+            getMenuInflater().inflate(R.menu.menu_delete, menu);
+        }
         return true;
     }
 
@@ -94,6 +100,13 @@ public class PoiDetailView extends AppCompatActivity {
         if (id == R.id.add_action) {
             Intent resultdata = new Intent();
             resultdata.putExtra("poi_id", poi_id);
+            setResult(Activity.RESULT_OK, resultdata);
+            finish();
+
+            return true;
+        } else if(id == R.id.delete_action){
+            Intent resultdata = new Intent();
+            resultdata.putExtra("deleted", true);
             setResult(Activity.RESULT_OK, resultdata);
             finish();
 
