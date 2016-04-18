@@ -31,6 +31,7 @@ import com.woxthebox.draglistview.DragItemAdapter;
 import edu.purdue.cs.Poi;
 import edu.purdue.cs.PoiDetailView;
 import edu.purdue.cs.R;
+import edu.purdue.cs.fragments.BoardFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,7 +92,8 @@ public class BoardAdapter extends DragItemAdapter<Pair<Long, Poi>, BoardAdapter.
                 e.printStackTrace();
             }
             intent.putExtra("poi_id",poi.getObjectId());
-            activity.startActivity(intent);
+            intent.putExtra("edit_mode", PoiDetailView.DELETE_MODE);
+            activity.startActivityForResult(intent, BoardFragment.CONFIRM_POI_DELETE);
         }
 
         @Override

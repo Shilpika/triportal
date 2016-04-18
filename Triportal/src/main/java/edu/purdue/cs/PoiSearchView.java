@@ -113,6 +113,7 @@ public class PoiSearchView extends AppCompatActivity implements AdapterView.OnIt
         }
         Intent intent = new Intent(PoiSearchView.this, PoiDetailView.class);
         intent.putExtra("poi_id", poi.getObjectId());
+        intent.putExtra("edit_mode", PoiDetailView.ADD_MODE);
         startActivityForResult(intent, PoiSearchView.CONFIRM_POI);
     }
 

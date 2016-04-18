@@ -58,6 +58,8 @@ public class BoardFragment extends Fragment {
     private Activity mActivity;
     static final private int SEARCH_REQUEST_CODE = 789;
 
+    public final static int CONFIRM_POI_DELETE = 1;
+
     //private View tClickedHeader;
     private int mlastClickedColumn = 0;
     //private ImageButton imageB
@@ -462,6 +464,14 @@ public class BoardFragment extends Fragment {
                 }
 
             }
+        } else if (requestCode == CONFIRM_POI_DELETE) {
+            if (resultCode == Activity.RESULT_OK) {
+                String poi_id = data.getStringExtra("poi_id");
+                Boolean deleted = data.getBooleanExtra("deleted", false);
+                if (deleted) {
+                    Log.d("Poi", poi_id + " deleted");
+                }
+            }
         }
     }
 
@@ -520,7 +530,6 @@ public class BoardFragment extends Fragment {
         }
 
     }
-
 
     private class PopUpMenuListtener implements PopupMenu.OnMenuItemClickListener,View.OnLongClickListener {
 
