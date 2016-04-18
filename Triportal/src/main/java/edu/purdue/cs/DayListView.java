@@ -53,6 +53,8 @@ public class DayListView extends AppCompatActivity{
         bundle.putString("user_ID",user.getObjectId());
        // String itneraryID = bundle.getString("it_ID");
 
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         BoardFragment fragment = BoardFragment.newInstance();
         fragment.setArguments(bundle);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

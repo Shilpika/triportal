@@ -52,6 +52,7 @@ public class PoiDetailView extends AppCompatActivity {
         //View rootView =  inflater.inflate(R.layout.trip_tab, container, false);
         toolbar = (Toolbar) findViewById(R.id.poi_detail_toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Detail");
 
 
         PoiDetailFragment fragment = PoiDetailFragment.newInstance();
@@ -114,9 +115,11 @@ public class PoiDetailView extends AppCompatActivity {
 
             return true;
         } else if(id == R.id.delete_action){
+            Bundle bundle = getIntent().getExtras();
             Intent resultdata = new Intent();
-            resultdata.putExtra("poi_id", poi_id);
-            resultdata.putExtra("deleted", true);
+            bundle.putString("poi_id", poi_id);
+            bundle.putBoolean("deleted", true);
+            resultdata.putExtras(bundle);
             setResult(Activity.RESULT_OK, resultdata);
             finish();
 

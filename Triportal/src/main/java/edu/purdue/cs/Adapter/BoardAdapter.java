@@ -42,6 +42,7 @@ public class BoardAdapter extends DragItemAdapter<Pair<Long, Poi>, BoardAdapter.
     private int mGrabHandleId;
     private Fragment mFragment;
     private boolean isOwned = true;
+    private View mHeader;
 
     public BoardAdapter(ArrayList<Pair<Long, Poi>> list, int layoutId, int grabHandleId, boolean dragOnLongPress, Fragment fragment) {
         super(dragOnLongPress);
@@ -51,8 +52,9 @@ public class BoardAdapter extends DragItemAdapter<Pair<Long, Poi>, BoardAdapter.
         setHasStableIds(true);
         setItemList(list);
     }
-    public BoardAdapter(ArrayList<Pair<Long, Poi>> list, int layoutId, int grabHandleId, boolean dragOnLongPress,
-                        Fragment fragment,Boolean isOwned) {
+    public BoardAdapter(ArrayList<Pair<Long, Poi>> list,
+                        int layoutId, int grabHandleId, boolean dragOnLongPress,
+                        Fragment fragment,Boolean isOwned,View headerView) {
         super(dragOnLongPress);
         mLayoutId = layoutId;
         mGrabHandleId = grabHandleId;
@@ -60,6 +62,7 @@ public class BoardAdapter extends DragItemAdapter<Pair<Long, Poi>, BoardAdapter.
         setHasStableIds(true);
         setItemList(list);
         this.isOwned = isOwned;
+        this.mHeader = headerView;
     }
 
     @Override
@@ -80,6 +83,8 @@ public class BoardAdapter extends DragItemAdapter<Pair<Long, Poi>, BoardAdapter.
     public long getItemId(int position) {
         return mItemList.get(position).first;
     }
+
+    public int getColumnIndex() { return (Integer) mHeader.getTag();}
 
     public class ViewHolder extends DragItemAdapter<Pair<Long, Poi>, ViewHolder>.ViewHolder {
         public TextView mText;
@@ -108,7 +113,9 @@ public class BoardAdapter extends DragItemAdapter<Pair<Long, Poi>, BoardAdapter.
             } else {
                 intent.putExtra("edit_mode", PoiDetailView.VIEW_MODE);
             }
-            activity.startActivityForResult(intent, BoardFragment.CONFIRM_POI_DELETE);
+            intent.putExtra("ClickedColumn",(Integer) mHeader.getTag());
+            intent.putExtra("ClickedID",(ViewHolder.this.mItemId));
+            mFragment.startActivityForResult(intent, BoardFragment.CONFIRM_POI_DELETE);
         }
 
         @Override

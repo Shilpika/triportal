@@ -26,6 +26,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.*;
 
 import android.support.v7.widget.PopupMenu;
@@ -53,6 +55,8 @@ public class BoardFragment extends Fragment {
     private List<Day> mDayList;
     private List<View> mHeaderList;
 
+    private ActionBar mActionBar;
+
     private ImageButton mForkBtn;
     private ImageButton mAddBtn;
     private ImageButton mSearchBtn;
@@ -62,7 +66,7 @@ public class BoardFragment extends Fragment {
 
     private Object[] mColumnList;
     private int mInitColumn = 0;
-    private Activity mActivity;
+    private AppCompatActivity mActivity;
 
     private boolean isOwned;
 
@@ -82,7 +86,7 @@ public class BoardFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mActivity = activity;
+        mActivity = (AppCompatActivity) activity;
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -107,6 +111,8 @@ public class BoardFragment extends Fragment {
         mSearchBtn = (ImageButton) view.findViewById(R.id.board_search_btn);
         mForkBtn = (ImageButton) view.findViewById(R.id.board_fork_btn);
         mForkProgress = (ProgressBar) view.findViewById(R.id.board_fork_btn_progress);
+
+        mActionBar = mActivity.getSupportActionBar();
 
         //TODO: temporarily change to invisible due to workaround
         mSearchBtn.setVisibility(View.GONE);
@@ -245,6 +251,9 @@ public class BoardFragment extends Fragment {
             Log.d("BoardFragment", "Itinerary getbyID fail");
         }
 
+        mActionBar.setTitle(mItinerary.getTitle());
+        mActionBar.setDisplayShowTitleEnabled(true);
+
         if(!mItinerary.getOwner().getObjectId().equals(bundle.getString("user_ID"))) {
             isOwned = false;
             mBoardView.setDragEnabled(false);
@@ -343,9 +352,9 @@ public class BoardFragment extends Fragment {
 
         final int column = mColumns;
         //TODO: this adapter need to be refine to fit in out project
-        final BoardAdapter listAdapter = new BoardAdapter(mItemArray, R.layout.board_item,
-                                                        R.id.board_item_layout, true,this,isOwned);
         final View header = View.inflate(mActivity, R.layout.board_column_header, null);
+        final BoardAdapter listAdapter = new BoardAdapter(mItemArray, R.layout.board_item,
+                R.id.board_item_layout, true,this,isOwned,header);
         mHeaderList.add(header);
         ((TextView) header.findViewById(R.id.board_header_text)).setText("Day " + (mColumns + 1));
         ((TextView) header.findViewById(R.id.board_header_text_2)).setText("" + PoiList.size());
@@ -390,9 +399,10 @@ public class BoardFragment extends Fragment {
 
         final int column = mColumns;
         //TODO: this adapter need to be refine to fit in out project
-        final BoardAdapter listAdapter = new BoardAdapter(mItemArray, R.layout.board_item,
-                                                        R.id.board_item_layout, true,this,isOwned);
+
         final View header = View.inflate(mActivity, R.layout.board_column_header, null);
+        final BoardAdapter listAdapter = new BoardAdapter(mItemArray, R.layout.board_item,
+                R.id.board_item_layout, true,this,isOwned,header);
         mHeaderList.add(header);
         ((TextView) header.findViewById(R.id.board_header_text)).setText("Day " + (index + 1));
         ((TextView) header.findViewById(R.id.board_header_text_2)).setText("" + PoiList.size());
@@ -477,7 +487,7 @@ public class BoardFragment extends Fragment {
         }
 
     }
-
+    @SuppressWarnings("unchecked")
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == SEARCH_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
@@ -520,8 +530,30 @@ public class BoardFragment extends Fragment {
             if (resultCode == Activity.RESULT_OK) {
                 String poi_id = data.getStringExtra("poi_id");
                 Boolean deleted = data.getBooleanExtra("deleted", false);
+                Long ItemID = data.getLongExtra("ClickedID",-1);
+                Integer tClickedColumn = data.getIntExtra("ClickedColumn",-1);
                 if (deleted) {
-                    Log.d("Poi", poi_id + " deleted");
+                    if(ItemID == -1 || tClickedColumn == -1) {
+                        Log.e("ERROR on delete Poi","ItemID is "+ItemID+"; Column Index is " + tClickedColumn );
+                    } else {
+                        Pair<BoardAdapter,View> pair = (Pair<BoardAdapter, View>) mColumnList[tClickedColumn];
+                        final int rowIndex = pair.first.getPositionForItemId(ItemID);
+                        mBoardView.removeItem(tClickedColumn,rowIndex);
+                        final Day tDay = mDayList.get(tClickedColumn);
+                        mDayList.get(tClickedColumn).getPoiListInBackground(new FindCallback<Poi>() {
+                            @Override
+                            public void done(List<Poi> objects, ParseException e) {
+                                objects.remove(rowIndex);
+                                try {
+                                    tDay.setPoiList(objects);
+                                } catch (ParseException e1) {
+                                   Log.e("Day","Error when setting PoiList to "+ tDay.toString());
+                                }
+                            }
+                        });
+                        Log.d("Poi", poi_id + " deleted");
+                    }
+
                 }
             }
         }
