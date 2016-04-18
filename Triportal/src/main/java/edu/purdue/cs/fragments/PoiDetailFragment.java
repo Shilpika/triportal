@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +17,17 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -34,7 +44,7 @@ import edu.purdue.cs.util.ImageDownloadTask;
 /**
  * Created by Ge on 16/4/6.
  */
-public class PoiDetailFragment extends Fragment {
+public class PoiDetailFragment extends Fragment{
 
     ImageView detailimage;
     TextView detailname;
@@ -45,6 +55,9 @@ public class PoiDetailFragment extends Fragment {
     TextView ratingTimes;
     TextView fixedDescirbe;
     Poi poi;
+    private Bundle mBundle;
+    private MapView mMapView;
+    GoogleMap mMap;
 
     public static PoiDetailFragment newInstance(){
         return new PoiDetailFragment();
@@ -53,6 +66,7 @@ public class PoiDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mBundle = savedInstanceState;
     }
 
     @Override
@@ -77,6 +91,11 @@ public class PoiDetailFragment extends Fragment {
         ratingTimes = (TextView)rootView.findViewById(R.id.poi_detail_ratingTimes);
         fixedDescirbe = (TextView)rootView.findViewById(R.id.description);
         detailDescription = (TextView)rootView.findViewById(R.id.poi_detail_description);
+
+        //map
+        mMapView = (MapView)rootView.findViewById(R.id.map);
+        mMapView.onCreate(mBundle);
+        setUpMapIfNeeded(rootView);
 
         String imageUrl = poi.getImage();
         if (imageUrl == null || imageUrl.isEmpty()) {
@@ -105,6 +124,41 @@ public class PoiDetailFragment extends Fragment {
 
         return rootView;
 
+    }
+
+    private void setUpMapIfNeeded(View inflatedView) {
+        if (mMap == null) {
+            mMap = ((MapView) inflatedView.findViewById(R.id.map)).getMap();
+            if (mMap != null) {
+                setUpMap();
+            }
+        }
+    }
+
+    private void setUpMap() {
+        ParseGeoPoint geoPoint = poi.getGeoPoint();
+        LatLng pos = new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude());
+        mMap.addMarker(new MarkerOptions().position(pos).title(poi.getName()).snippet(poi.getLocationString()));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 13));
 
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mMapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mMapView.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        mMapView.onDestroy();
+        super.onDestroy();
+    }
+
 }
