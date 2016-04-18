@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import edu.purdue.cs.CreateItineraryView;
+import edu.purdue.cs.Listener.OnRefreshListener;
 import edu.purdue.cs.Startup;
 import edu.purdue.cs.util.template.TabFragment;
 import edu.purdue.cs.util.view.SlidingTabLayout;
@@ -37,7 +38,14 @@ import java.text.Format;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SlidingTabsFragment extends Fragment {
+public class SlidingTabsFragment extends Fragment implements OnRefreshListener {
+
+    @Override
+    public void onRefresh(View v) {
+        for(PagerItem item : mTabs) {
+            item.getFragment().refreshList();
+        }
+    }
 
     public enum PagerItemTag {TRIP,DISCOVER}
 
@@ -54,10 +62,13 @@ public class SlidingTabsFragment extends Fragment {
             mTitle = title;
             mTag = tag;
 
+            fragment.setOnRefeshListener(SlidingTabsFragment.this);
+            //fragment.setArguments(new Bundle().put);
+
         }
 
 
-        public Fragment getFragment() {
+        public TabFragment getFragment() {
             return mfragment;
         }
 
@@ -100,6 +111,8 @@ public class SlidingTabsFragment extends Fragment {
 
 
 
+
+
         //TODO: Add discover fragment to Pager
 
 //        mTabs.add(new PagerItem(
@@ -108,6 +121,9 @@ public class SlidingTabsFragment extends Fragment {
 //        ));
 
     }
+
+
+
 
     public PagerItem getPagerItembyTag(PagerItemTag tag) {
         for(PagerItem item : mTabs) {

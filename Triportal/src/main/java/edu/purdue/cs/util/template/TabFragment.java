@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import edu.purdue.cs.Listener.OnRefreshListener;
 import edu.purdue.cs.R;
 
 /**
@@ -13,6 +14,9 @@ import edu.purdue.cs.R;
  */
 public class TabFragment extends Fragment {
     //TODO: import information of user etc..
+
+    protected OnRefreshListener onRefreshListener;
+
     public static TabFragment newInstance(Bundle bundle) {
 
 
@@ -28,5 +32,13 @@ public class TabFragment extends Fragment {
         //TODO: May used to verify user info?
     }
 
+    public void refreshList() {
+        if(onRefreshListener == null) return;
+        onRefreshListener.onRefresh(getView());
+    }
+
+    public void setOnRefeshListener(OnRefreshListener listener) {
+        onRefreshListener = listener;
+    }
 
 }

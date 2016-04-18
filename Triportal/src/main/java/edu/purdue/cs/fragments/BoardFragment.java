@@ -216,18 +216,18 @@ public class BoardFragment extends Fragment {
                 mForkBtn.setVisibility(View.GONE);
                 mForkProgress.setVisibility(View.VISIBLE);
                 //TODO: TO FORK
-//                mItinerary.forkInBackground(new FunctionCallback<Itinerary>() {
+                mItinerary.forkInBackground(new FunctionCallback<Itinerary>() {
+                    @Override
+                    public void done(Itinerary object, ParseException e) {
+                        BoardFragment.this.getActivity().finish();
+                    }
+                });
+//                new android.os.Handler().postDelayed(new Runnable() {
 //                    @Override
-//                    public void done(Itinerary object, ParseException e) {
+//                    public void run() {
 //                        getActivity().finish();
 //                    }
-//                });
-                new android.os.Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        getActivity().finish();
-                    }
-                },1000);
+//                },1000);
             }
         });
     }

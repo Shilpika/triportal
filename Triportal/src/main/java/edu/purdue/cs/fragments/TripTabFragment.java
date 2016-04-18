@@ -40,7 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class TripTabFragment extends TabFragment {
+public class TripTabFragment extends TabFragment{
 
     /**
      * inflating view of tab contents
@@ -50,6 +50,8 @@ public class TripTabFragment extends TabFragment {
     private ImageButton createButton;
     private List<Itinerary> itineraryList;
     private Context pContext;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -91,6 +93,7 @@ public class TripTabFragment extends TabFragment {
         super.onResume();
 
         refreshList();
+        onRefreshListener.onRefresh(getView());
     }
 
     @Override
@@ -118,7 +121,8 @@ public class TripTabFragment extends TabFragment {
 
     }
 
-    private void refreshList() {
+    @Override
+    public void refreshList() {
         Itinerary.getMyItineraryListInBackground(new FindCallback<Itinerary>() {
             @Override
             public void done(List<Itinerary> objects, ParseException e) {
@@ -151,6 +155,7 @@ public class TripTabFragment extends TabFragment {
                 public void done(ParseException e) {
                     Toast.makeText(TripTabFragment.this.getActivity(), "Delete Success" , Toast.LENGTH_SHORT).show();
                     TripTabFragment.this.refreshList();
+                    onRefreshListener.onRefresh(getView());
                 }
             });
         } catch (ParseException e) {

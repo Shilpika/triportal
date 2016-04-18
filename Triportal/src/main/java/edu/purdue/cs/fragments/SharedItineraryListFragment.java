@@ -29,6 +29,7 @@ import android.widget.*;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseUser;
 import edu.purdue.cs.*;
 import edu.purdue.cs.util.template.TabFragment;
 import org.w3c.dom.Text;
@@ -49,6 +50,7 @@ public class SharedItineraryListFragment extends TabFragment {
     private ImageButton addBtn;
     private List<Itinerary> itineraryList;
     private Context pContext;
+    private String mUserID;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -57,6 +59,9 @@ public class SharedItineraryListFragment extends TabFragment {
         tripList = (ListView) rootView.findViewById(R.id.trip_list);
         addBtn = (ImageButton) rootView.findViewById(R.id.trip_tab_create_i_btn);
         addBtn.setVisibility(View.GONE);
+
+        mUserID = ParseUser.getCurrentUser().getObjectId();
+
         setupList();
 
         return rootView;
@@ -104,20 +109,32 @@ public class SharedItineraryListFragment extends TabFragment {
         Itinerary.getSharedItineraryListInBackground(new FindCallback<Itinerary>() {
             @Override
             public void done(List<Itinerary> objects, ParseException e) {
-                itineraryList = objects;
+                SharedItineraryListFragment.this.itineraryList = new ArrayList<Itinerary>();
+                for(Itinerary itinerary : objects) {
+                    if(!itinerary.getOwner().getObjectId().equals(SharedItineraryListFragment.this.mUserID)) {
+                        itineraryList.add(itinerary);
+                    }
+                }
+                //SharedItineraryListFragment.this.itineraryList = objects;
                 // assert(itineraryList.size() != 0);
-                tripList.setAdapter(createAdapter());
-                tripList.setOnItemClickListener(new ListItemClickListener());
+                SharedItineraryListFragment.this.tripList.setAdapter(createAdapter());
+                SharedItineraryListFragment.this.tripList.setOnItemClickListener(new ListItemClickListener());
             }
         });
     }
 
-    private void refreshList() {
+    @Override
+    public void refreshList() {
         Itinerary.getSharedItineraryListInBackground(new FindCallback<Itinerary>() {
             @Override
             public void done(List<Itinerary> objects, ParseException e) {
                 if(objects == null) return;
-                itineraryList = objects;
+                SharedItineraryListFragment.this.itineraryList = new ArrayList<Itinerary>();
+                for(Itinerary itinerary : objects) {
+                    if(!itinerary.getOwner().getObjectId().equals(SharedItineraryListFragment.this.mUserID)) {
+                        itineraryList.add(itinerary);
+                    }
+                }
                 SharedItineraryListAdapter adapter = (SharedItineraryListAdapter) tripList.getAdapter();
                 if(adapter == null) return;
                 adapter.updateList(itineraryList);
