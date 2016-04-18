@@ -5,7 +5,6 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.1.0-beta1'
-
     }
 
     allprojects {
@@ -21,6 +20,8 @@ buildscript {
 
         minSdkVersion = 21
         targetSdkVersion = 23
+
+        googlePlay = 'com.google.android.gms:play-services:8.4.0'
 
         androidSupport = 'com.android.support:support-v4:23.2.1'
         androidAppCompat = 'com.android.support:appcompat-v7:23.2.1'

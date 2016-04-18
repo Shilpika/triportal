@@ -17,9 +17,11 @@ import android.widget.ListView;
 import java.util.*;
 import android.widget.ArrayAdapter;
 
+import com.parse.Parse;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 
+import com.parse.ParseUser;
 import edu.purdue.cs.Adapter.DayListViewAdapter;
 import edu.purdue.cs.fragments.BoardFragment;
 
@@ -30,6 +32,7 @@ public class DayListView extends AppCompatActivity{
     private Itinerary itinerary;
     private Toolbar toolbar;
     private ListView poilist;
+    private boolean isOwned;
 
 
 
@@ -40,11 +43,15 @@ public class DayListView extends AppCompatActivity{
 
         setContentView(R.layout.daylistview);
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
+
+        ParseUser user = ParseUser.getCurrentUser();
+        // user.getObjectId()
         //View rootView =  inflater.inflate(R.layout.trip_tab, container, false);
         toolbar = (Toolbar) findViewById(R.id.dayListViewActionBar);
         poilist = (ListView) findViewById(R.id.day_list);
         Bundle bundle = getIntent().getExtras();
-        String itneraryID = bundle.getString("it_ID");
+        bundle.putString("user_ID",user.getObjectId());
+       // String itneraryID = bundle.getString("it_ID");
 
         BoardFragment fragment = BoardFragment.newInstance();
         fragment.setArguments(bundle);

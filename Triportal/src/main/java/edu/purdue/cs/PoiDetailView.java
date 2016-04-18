@@ -1,7 +1,6 @@
 package edu.purdue.cs;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -31,10 +30,16 @@ import edu.purdue.cs.fragments.PoiDetailFragment;
  * Created by Ge on 16/4/7.
  */
 public class PoiDetailView extends AppCompatActivity {
+
+    public static final int ADD_MODE = 0;
+    public static final int DELETE_MODE = 1;
+    public static final int VIEW_MODE = 2;
+
     private Itinerary itinerary;
     private Toolbar toolbar;
     private ListView poilist;
     private String poi_id;
+    private int edit_mode;
 
 
     @Override
@@ -53,6 +58,7 @@ public class PoiDetailView extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         fragment.setArguments(extras);
         poi_id = extras.getString("poi_id");
+        edit_mode = extras.getInt("edit_mode");
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.poi_detail_frame, fragment, "fragment").commit();
 
@@ -79,7 +85,16 @@ public class PoiDetailView extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_poidetail, menu);
+        switch (edit_mode) {
+            case ADD_MODE:
+                getMenuInflater().inflate(R.menu.menu_poidetail, menu);
+                break;
+            case DELETE_MODE:
+                getMenuInflater().inflate(R.menu.menu_delete, menu);
+                break;
+            case VIEW_MODE:
+                break;
+        }
         return true;
     }
 
@@ -94,6 +109,14 @@ public class PoiDetailView extends AppCompatActivity {
         if (id == R.id.add_action) {
             Intent resultdata = new Intent();
             resultdata.putExtra("poi_id", poi_id);
+            setResult(Activity.RESULT_OK, resultdata);
+            finish();
+
+            return true;
+        } else if(id == R.id.delete_action){
+            Intent resultdata = new Intent();
+            resultdata.putExtra("poi_id", poi_id);
+            resultdata.putExtra("deleted", true);
             setResult(Activity.RESULT_OK, resultdata);
             finish();
 

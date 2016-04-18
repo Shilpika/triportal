@@ -31,15 +31,17 @@ import com.woxthebox.draglistview.DragItemAdapter;
 import edu.purdue.cs.Poi;
 import edu.purdue.cs.PoiDetailView;
 import edu.purdue.cs.R;
+import edu.purdue.cs.fragments.BoardFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoardAdapter extends DragItemAdapter<Pair<Long, Poi>, BoardAdapter.ViewHolder> {
+public class BoardAdapter extends DragItemAdapter<Pair<Long, Poi>, BoardAdapter.ViewHolder>  {
 
     private int mLayoutId;
     private int mGrabHandleId;
     private Fragment mFragment;
+    private boolean isOwned = true;
 
     public BoardAdapter(ArrayList<Pair<Long, Poi>> list, int layoutId, int grabHandleId, boolean dragOnLongPress, Fragment fragment) {
         super(dragOnLongPress);
@@ -48,6 +50,16 @@ public class BoardAdapter extends DragItemAdapter<Pair<Long, Poi>, BoardAdapter.
         mFragment = fragment;
         setHasStableIds(true);
         setItemList(list);
+    }
+    public BoardAdapter(ArrayList<Pair<Long, Poi>> list, int layoutId, int grabHandleId, boolean dragOnLongPress,
+                        Fragment fragment,Boolean isOwned) {
+        super(dragOnLongPress);
+        mLayoutId = layoutId;
+        mGrabHandleId = grabHandleId;
+        mFragment = fragment;
+        setHasStableIds(true);
+        setItemList(list);
+        this.isOwned = isOwned;
     }
 
     @Override
@@ -91,7 +103,12 @@ public class BoardAdapter extends DragItemAdapter<Pair<Long, Poi>, BoardAdapter.
                 e.printStackTrace();
             }
             intent.putExtra("poi_id",poi.getObjectId());
-            activity.startActivity(intent);
+            if(isOwned) {
+                intent.putExtra("edit_mode", PoiDetailView.DELETE_MODE);
+            } else {
+                intent.putExtra("edit_mode", PoiDetailView.VIEW_MODE);
+            }
+            activity.startActivityForResult(intent, BoardFragment.CONFIRM_POI_DELETE);
         }
 
         @Override
