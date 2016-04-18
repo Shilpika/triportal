@@ -40,11 +40,11 @@ public class BoardAdapter extends DragItemAdapter<Pair<Long, Poi>, BoardAdapter.
 
     private int mLayoutId;
     private int mGrabHandleId;
-    private Fragment mFragment;
+    private BoardFragment mFragment;
     private boolean isOwned = true;
     private View mHeader;
 
-    public BoardAdapter(ArrayList<Pair<Long, Poi>> list, int layoutId, int grabHandleId, boolean dragOnLongPress, Fragment fragment) {
+    public BoardAdapter(ArrayList<Pair<Long, Poi>> list, int layoutId, int grabHandleId, boolean dragOnLongPress, BoardFragment fragment) {
         super(dragOnLongPress);
         mLayoutId = layoutId;
         mGrabHandleId = grabHandleId;
@@ -54,7 +54,7 @@ public class BoardAdapter extends DragItemAdapter<Pair<Long, Poi>, BoardAdapter.
     }
     public BoardAdapter(ArrayList<Pair<Long, Poi>> list,
                         int layoutId, int grabHandleId, boolean dragOnLongPress,
-                        Fragment fragment,Boolean isOwned,View headerView) {
+                        BoardFragment fragment,Boolean isOwned,View headerView) {
         super(dragOnLongPress);
         mLayoutId = layoutId;
         mGrabHandleId = grabHandleId;
@@ -82,6 +82,10 @@ public class BoardAdapter extends DragItemAdapter<Pair<Long, Poi>, BoardAdapter.
     @Override
     public long getItemId(int position) {
         return mItemList.get(position).first;
+    }
+
+    public View getHeader() {
+        return mHeader;
     }
 
     public int getColumnIndex() { return (Integer) mHeader.getTag();}
@@ -114,6 +118,7 @@ public class BoardAdapter extends DragItemAdapter<Pair<Long, Poi>, BoardAdapter.
                 intent.putExtra("edit_mode", PoiDetailView.VIEW_MODE);
             }
             intent.putExtra("ClickedColumn",(Integer) mHeader.getTag());
+            mFragment.setLastClickedColumn((Integer) mHeader.getTag());
             intent.putExtra("ClickedID",(ViewHolder.this.mItemId));
             mFragment.startActivityForResult(intent, BoardFragment.CONFIRM_POI_DELETE);
         }

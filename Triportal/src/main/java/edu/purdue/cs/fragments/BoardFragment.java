@@ -99,8 +99,13 @@ public class BoardFragment extends Fragment {
         super.onResume();
         if(mlastClickedColumn == mColumns -1) {
             scrollToEnd();
+        } else {
+            mBoardView.scrollToColumn(mlastClickedColumn, false);
         }
-        mBoardView.scrollToColumn(mlastClickedColumn,false);
+    }
+
+    public void setLastClickedColumn(int column) {
+        this.mlastClickedColumn = column;
     }
 
 
@@ -503,9 +508,9 @@ public class BoardFragment extends Fragment {
                 long id = sCreatedItems++;
                 Pair<Long,Poi> item = new Pair<>(id, poi);
                 Log.d("onActivityResult Column","" + tClickedColumn);
-                mBoardView.addItemtoEnd(tClickedColumn, item, false);
                 BoardAdapter adapter = (BoardAdapter)  mBoardView.getAdapter(tClickedColumn);
-                ((TextView) mHeaderList.get(tClickedColumn).findViewById(R.id.board_header_text_2)).setText("" + adapter.getItemCount());
+                ((TextView) adapter.getHeader().findViewById(R.id.board_header_text_2)).setText("" + (adapter.getItemCount()+1));
+                mBoardView.addItemtoEnd(tClickedColumn, item, false);
                 Log.d("onActivityResult Column","" + tClickedColumn);
                // mBoardView.scrollToColumnWithUpdate(tClickedColumn,true);
                 mlastClickedColumn = tClickedColumn;
@@ -538,6 +543,8 @@ public class BoardFragment extends Fragment {
                     } else {
                         Pair<BoardAdapter,View> pair = (Pair<BoardAdapter, View>) mColumnList[tClickedColumn];
                         final int rowIndex = pair.first.getPositionForItemId(ItemID);
+                        BoardAdapter adapter = pair.first;
+                        ((TextView) adapter.getHeader().findViewById(R.id.board_header_text_2)).setText("" + (adapter.getItemCount()-1));
                         mBoardView.removeItem(tClickedColumn,rowIndex);
                         final Day tDay = mDayList.get(tClickedColumn);
                         mDayList.get(tClickedColumn).getPoiListInBackground(new FindCallback<Poi>() {

@@ -384,8 +384,12 @@ public class BoardView extends HorizontalScrollView implements AutoScroller.Auto
 
     public void removeItem(int column, int row) {
         if (!isDragging() && mLists.size() > column && mLists.get(column).getAdapter().getItemCount() > row) {
+            if(column != getColumnCount() - 1) {
+                scrollToColumn(column, false);
+            }
             DragItemAdapter adapter = (DragItemAdapter) mLists.get(column).getAdapter();
             adapter.removeItem(row);
+
         }
     }
 
