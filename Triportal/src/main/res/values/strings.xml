@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Application Keys -->
+    <string name="google_app_id">triportal-6c1d2</string>
     <string name="google_api_key">AIzaSyBED79zshEvkVpV_97x2ba2pNztwhVlvUQ</string>
     <string name="parse_app_id">nvNbDRRm3lmBFq7n46g32MRZKmADJGyyzjdSbQrT</string>
     <string name="parse_client_key">vQj3W5b0seexrLf5f6yjOicjHc4TLi2zVmZrhasC</string>
