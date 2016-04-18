@@ -23,10 +23,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.util.Pair;
-import android.support.v7.widget.CardView;
+import android.support.v7.widget.*;
 
+import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.*;
 import android.view.animation.DecelerateInterpolator;
@@ -34,6 +34,7 @@ import android.widget.*;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.SaveCallback;
 import com.woxthebox.draglistview.BoardView;
 import com.woxthebox.draglistview.DragItem;
 import edu.purdue.cs.*;
@@ -42,7 +43,6 @@ import edu.purdue.cs.Adapter.BoardAdapter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 public class BoardFragment extends Fragment {
 
     private static int sCreatedItems = 0;
@@ -86,6 +86,7 @@ public class BoardFragment extends Fragment {
         }
         mBoardView.scrollToColumn(mlastClickedColumn,false);
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -301,21 +302,29 @@ public class BoardFragment extends Fragment {
         mHeaderList.add(header);
         ((TextView) header.findViewById(R.id.board_header_text)).setText("Day " + (mColumns + 1));
         ((TextView) header.findViewById(R.id.board_header_text_2)).setText("" + PoiList.size());
+        //associate the column index to the header to be updated and used by other function
+        header.setTag(column);
         header.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO: click on the title to add another POI in day; we still need a place to add day
                 Intent intent = new Intent(getActivity(), PoiSearchView.class);
-                intent.putExtra("ClickedColumn", column);
+                intent.putExtra("ClickedColumn", (Integer) header.getTag());
                 startActivityForResult(intent,SEARCH_REQUEST_CODE);
             }
         });
+        header.setOnLongClickListener(new PopUpMenuListtener(header));
+
+
+
 
         mBoardView.addColumnList(listAdapter, header, false);
+        mColumnList[column] = new Pair<>(listAdapter,header);
         mColumns++;
       //  mBoardView.scrollToColumn(mColumns-2,true);
         scrollToEnd();
     }
+
 
     private void addColumnList(List<Poi> PoiList, int index) {
         //TODO: turn this into adding days
@@ -343,6 +352,39 @@ public class BoardFragment extends Fragment {
 
     }
 
+    @SuppressWarnings("unchecked")
+    private void removeColumn(final int cIndex) {
+       // Object[] newColumnList = new Object[--mColumns];
+        //Pair<BoardAdapter,View> pair = (Pair<BoardAdapter, View>) mColumnList[cIndex];
+        Day day = (Day) mDayList.get(cIndex);
+        List<Object> newColumnList = new ArrayList<>(Arrays.asList(mColumnList));
+        mHeaderList.remove(cIndex);
+        newColumnList.remove(cIndex);
+        mDayList.remove(cIndex);
+        mColumns--;
+
+
+        //update header and index of the list
+        for(int i = 0; i < newColumnList.size(); i++) {
+
+            Pair<BoardAdapter,View> pair = (Pair<BoardAdapter, View>) newColumnList.get(i);
+            pair.second.setTag(i);
+            ((TextView) pair.second.findViewById(R.id.board_header_text)).setText("Day " +(i+1));
+        }
+
+        mColumnList = newColumnList.toArray();
+        mBoardView.removeColumn(cIndex);
+
+        mItinerary.removeDayAtInBackground(cIndex, new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                Log.d("Remove Day:","remove " +cIndex+" is done");
+            }
+        });
+
+
+    }
+
     private void scrollToEnd() {
         mBoardView.post(new Runnable() {
             @Override
@@ -351,25 +393,31 @@ public class BoardFragment extends Fragment {
             }
         });
     }
+
+
     @SuppressWarnings("unchecked")
     private void onFinishInitList() {
         int column = 0;
         for(Object o : mColumnList) {
             final int final_column = column;
             Pair<BoardAdapter,View> pair = (Pair<BoardAdapter,View>) o;
+            pair.second.setTag(final_column);
+            final View header = pair.second;
             pair.second.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //TODO: click on the title to add another POI in day; we still need a place to add day
-                    Log.d("Clicked Header ","" + final_column);
+                    Log.d("Clicked Header ","" + (Integer) header.getTag());
 
 
                     Intent intent = new Intent(getActivity(), PoiSearchView.class);
-                    intent.putExtra("ClickedColumn", final_column);
+                    intent.putExtra("ClickedColumn", (Integer) header.getTag());
                     startActivityForResult(intent,SEARCH_REQUEST_CODE);
 
                 }
             });
+            header.setOnLongClickListener(new PopUpMenuListtener(header));
+
             mBoardView.addColumnList(pair.first,pair.second,false);
             column++;
         }
@@ -472,6 +520,40 @@ public class BoardFragment extends Fragment {
         }
 
     }
+
+
+    private class PopUpMenuListtener implements PopupMenu.OnMenuItemClickListener,View.OnLongClickListener {
+
+        View mView;
+
+
+        //THIS CAN ONLY USED BY HEADER VIEW
+        public PopUpMenuListtener(View view) {
+            this.mView =  view;
+        }
+
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.day_list_item_delete:
+                    BoardFragment.this.removeColumn((Integer) mView.getTag());
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            PopupMenu popupMenu = new PopupMenu(BoardFragment.this.getContext(), v);
+            popupMenu.setOnMenuItemClickListener(this);
+            popupMenu.inflate(R.menu.menu_daylist_header);
+            popupMenu.show();
+
+            return false;
+        }
+    }
+
 
 
 }

@@ -35,7 +35,7 @@ import edu.purdue.cs.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoardAdapter extends DragItemAdapter<Pair<Long, Poi>, BoardAdapter.ViewHolder> {
+public class BoardAdapter extends DragItemAdapter<Pair<Long, Poi>, BoardAdapter.ViewHolder>  {
 
     private int mLayoutId;
     private int mGrabHandleId;
