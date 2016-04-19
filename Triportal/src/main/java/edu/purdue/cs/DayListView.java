@@ -94,11 +94,6 @@ public class DayListView extends AppCompatActivity{
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return boardFragment.onOptionsItemSelected(item);
-
-    }
 
     //    private void getData(String id){
 //        try {
