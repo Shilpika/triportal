@@ -139,7 +139,7 @@ public class PoiDetailFragment extends Fragment{
         ParseGeoPoint geoPoint = poi.getGeoPoint();
         LatLng pos = new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude());
         mMap.addMarker(new MarkerOptions().position(pos).title(poi.getName()).snippet(poi.getLocationString()));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 13));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 15));
 
     }
 
