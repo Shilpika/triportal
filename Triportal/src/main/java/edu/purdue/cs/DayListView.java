@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -25,6 +27,8 @@ import com.parse.ParseUser;
 import edu.purdue.cs.Adapter.DayListViewAdapter;
 import edu.purdue.cs.fragments.BoardFragment;
 
+import edu.purdue.cs.R;
+
 /**
  * Created by Ge on 16/3/3.
  */
@@ -33,6 +37,7 @@ public class DayListView extends AppCompatActivity{
     private Toolbar toolbar;
     private ListView poilist;
     private boolean isOwned;
+    private BoardFragment boardFragment;
 
 
 
@@ -56,6 +61,7 @@ public class DayListView extends AppCompatActivity{
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         BoardFragment fragment = BoardFragment.newInstance();
+        boardFragment = fragment;
         fragment.setArguments(bundle);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.day_list_frame, fragment, "fragment").commit();
@@ -80,8 +86,21 @@ public class DayListView extends AppCompatActivity{
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_board,menu);
+        //menu.findItem(R.id.action_board_edit_name).setVisible(false);
+        return true;
+    }
 
-//    private void getData(String id){
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return boardFragment.onOptionsItemSelected(item);
+
+    }
+
+    //    private void getData(String id){
 //        try {
 //        } catch (Exception e) {
 //            e.printStackTrace();

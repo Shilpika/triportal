@@ -17,6 +17,7 @@
 package edu.purdue.cs.fragments;
 
 
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
@@ -27,6 +28,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.*;
 
@@ -91,6 +93,7 @@ public class BoardFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         //setHasOptionsMenu(true);
     }
 
@@ -118,6 +121,7 @@ public class BoardFragment extends Fragment {
         mForkProgress = (ProgressBar) view.findViewById(R.id.board_fork_btn_progress);
 
         mActionBar = mActivity.getSupportActionBar();
+
 
         //TODO: temporarily change to invisible due to workaround
         mSearchBtn.setVisibility(View.GONE);
@@ -264,6 +268,7 @@ public class BoardFragment extends Fragment {
             mBoardView.setDragEnabled(false);
             mAddBtn.setVisibility(View.GONE);
             mForkBtn.setVisibility(View.VISIBLE);
+
         } else {
             isOwned = true;
         }
@@ -288,22 +293,56 @@ public class BoardFragment extends Fragment {
         //addColumnList();
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-       // inflater.inflate(R.menu.menu_board, menu);
-    }
+
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
+        if(!isOwned) menu.findItem(R.id.action_board_edit_name).setVisible(false);
        // menu.findItem(R.id.action_disable_drag).setVisible(mBoardView.isDragEnabled());
         //menu.findItem(R.id.action_enable_drag).setVisible(!mBoardView.isDragEnabled());
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //TODO: this is redundent in our project
+
+        if(item.getItemId() == R.id.action_board_edit_name) {
+            LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+            View promptView = layoutInflater.inflate(R.layout.alart_change_itinerary_name, null);
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+            alertDialogBuilder.setView(promptView);
+
+            final EditText newNameEditText = (EditText)promptView.findViewById(R.id.alert_change_name_editText);
+            newNameEditText.setText(mActionBar.getTitle());
+
+            alertDialogBuilder.setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            String input = newNameEditText.getText().toString();
+                            BoardFragment.this.mActionBar.setTitle(input);
+                            mItinerary.setTitle(input);
+                            mItinerary.saveInBackground(new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    Log.d("setTitle","");
+                                }
+                            });
+
+                        }
+                    })
+                    .setNegativeButton("Cancel",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+
+
+            // create an alert dialog
+            AlertDialog alert = alertDialogBuilder.create();
+            alert.show();
+
+        }
 /*        switch (item.getItemId()) {
             case R.id.action_disable_drag:
                 mBoardView.setDragEnabled(false);
