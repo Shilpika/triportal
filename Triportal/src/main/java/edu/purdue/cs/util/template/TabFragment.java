@@ -14,6 +14,7 @@ import edu.purdue.cs.R;
  */
 public class TabFragment extends Fragment {
     //TODO: import information of user etc..
+    private boolean isCreated = false;
 
     protected OnRefreshListener onRefreshListener;
 
@@ -29,7 +30,12 @@ public class TabFragment extends Fragment {
     @Override
     public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isCreated = true;
         //TODO: May used to verify user info?
+    }
+
+    public boolean isCreated() {
+        return this.isCreated;
     }
 
     public void refreshList() {

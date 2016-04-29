@@ -20,6 +20,7 @@
     <!--Startup Screen -->
     <string name="title_tab_trip">Trip</string>
     <string name="title_tab_discover">Discover</string>
+    <string name="title_tab_joined">Invitations</string>
     <string name="trip_tab_list_item_view_btn">View</string>
     <string name="trip_tab_list_item_delete_btn">Delete</string>
     <!--End-->
