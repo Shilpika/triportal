@@ -4,5 +4,8 @@
         android:id="@+id/day_list_item_delete"
         android:title="@string/menu_daylist_delete_text"
         android:visible="true"/>
-
+    <item
+        android:id="@+id/day_list_navigate"
+        android:title="@string/menu_daylist_navigate"
+        android:visible="true"/>
 </menu>

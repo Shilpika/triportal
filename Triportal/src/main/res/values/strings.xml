@@ -30,5 +30,6 @@
     <string name="action_sign_in_with_google">Sign in with Google+</string>
     <string name="action_sign_in_with_facebook">Sign in with Facebook</string>
     <string name="menu_daylist_delete_text">Delete This Day</string>
+    <string name="menu_daylist_navigate">Navigate</string>
 
 </resources>

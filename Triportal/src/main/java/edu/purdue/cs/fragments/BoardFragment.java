@@ -42,6 +42,8 @@ import com.woxthebox.draglistview.BoardView;
 import com.woxthebox.draglistview.DragItem;
 import edu.purdue.cs.*;
 import edu.purdue.cs.Adapter.BoardAdapter;
+import edu.purdue.cs.Listener.onFinishedListener;
+import edu.purdue.cs.util.GoogleMapsUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -491,6 +493,10 @@ public class BoardFragment extends Fragment {
 
     }
 
+    public Day getDay(int index) {
+        return mDayList.get(index);
+    }
+
     private void scrollToEnd() {
         mBoardView.post(new Runnable() {
             @Override
@@ -661,7 +667,7 @@ public class BoardFragment extends Fragment {
 
     }
 
-    private class PopUpMenuListtener implements PopupMenu.OnMenuItemClickListener,View.OnLongClickListener {
+    private class PopUpMenuListtener implements PopupMenu.OnMenuItemClickListener,View.OnLongClickListener, onFinishedListener {
 
         View mView;
 
@@ -677,6 +683,9 @@ public class BoardFragment extends Fragment {
                 case R.id.day_list_item_delete:
                     BoardFragment.this.removeColumn((Integer) mView.getTag());
                     return true;
+                case R.id.day_list_navigate:
+                    GoogleMapsUtil.parseDayInOrder(BoardFragment.this.getDay((Integer) mView.getTag()),this);
+                    return true;
                 default:
                     return false;
             }
@@ -690,6 +699,11 @@ public class BoardFragment extends Fragment {
             popupMenu.show();
 
             return false;
+        }
+
+        @Override
+        public void onFinishedParsed(String parsed) {
+            GoogleMapsUtil.intentApp(parsed,BoardFragment.this.getContext());
         }
     }
 
