@@ -222,7 +222,17 @@ public class BoardFragment extends Fragment {
         mShareBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                LayoutInflater layoutInflater = LayoutInflater.from(mActivity);
+                View promptVIew = layoutInflater.inflate(R.layout.input_dialog, null);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mActivity);
+                alertDialogBuilder.setView(promptVIew);
+
+                alertDialogBuilder.setCancelable(false).setPositiveButton("OK", new dialogListener());
+
                 //Toast.makeText(getContext(), "Add Poi", Toast.LENGTH_SHORT).show();
+
+                AlertDialog alert = alertDialogBuilder.create();
+                alert.show();
 
             }
         });
@@ -704,6 +714,15 @@ public class BoardFragment extends Fragment {
         @Override
         public void onFinishedParsed(String parsed) {
             GoogleMapsUtil.intentApp(parsed,BoardFragment.this.getContext());
+        }
+    }
+
+    private class dialogListener implements DialogInterface.OnClickListener {
+
+
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+
         }
     }
 
