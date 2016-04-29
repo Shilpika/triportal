@@ -1,5 +1,8 @@
 package edu.purdue.cs.fragments;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -29,9 +32,15 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 
+import org.w3c.dom.Text;
+
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 
@@ -39,7 +48,9 @@ import edu.purdue.cs.DayListView;
 import edu.purdue.cs.Itinerary;
 import edu.purdue.cs.*;
 import edu.purdue.cs.R;
+import edu.purdue.cs.model.Weather;
 import edu.purdue.cs.util.ImageDownloadTask;
+import edu.purdue.cs.model.Location;
 
 /**
  * Created by Ge on 16/4/6.
@@ -58,6 +69,10 @@ public class PoiDetailFragment extends Fragment{
     private Bundle mBundle;
     private MapView mMapView;
     GoogleMap mMap;
+    private TextView condDescr;
+    private ImageView icon;
+    private TextView temp;
+    private ImageView tt;
 
     public static PoiDetailFragment newInstance(){
         return new PoiDetailFragment();
@@ -122,9 +137,57 @@ public class PoiDetailFragment extends Fragment{
             detailDescription.setText(poi.getDescription());
         }
 
+        //weather
+        String city = poi.getLocationString().replace(" ", "");
+
+        icon = (ImageView) rootView.findViewById(R.id.condIcon);
+        condDescr = (TextView) rootView.findViewById(R.id.condDescr);
+        temp = (TextView) rootView.findViewById(R.id.temp);
+
+        JSONWeatherTask task = new JSONWeatherTask();
+        task.execute(new String[]{city});
+
         return rootView;
 
     }
+
+
+    private class JSONWeatherTask extends AsyncTask<String, Void, Weather> {
+
+        @Override
+        protected Weather doInBackground(String... params) {
+            Weather weather = new Weather();
+            String data = ((new WeatherHTTPClient()).getWeatherData(params[0]));
+
+            try {
+                weather = JSONWeatherParser.getWeather(data);
+
+                // Let's retrieve the icon
+                weather.iconData = ((new WeatherHTTPClient()).getImage(weather.currentCondition.getIcon()));
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return weather;
+
+        }
+
+        @Override
+        protected void onPostExecute(Weather weather) {
+            super.onPostExecute(weather);
+
+            if (weather.iconData != null) {
+                icon.setImageBitmap(weather.iconData);
+            }
+
+            condDescr.setText(weather.currentCondition.getCondition() + "(" + weather.currentCondition.getDescr() + ")");
+            temp.setText("" + Math.round((weather.temperature.getTemp() - 273.15)) + "°C");
+
+        }
+    }
+
+
+
 
     private void setUpMapIfNeeded(View inflatedView) {
         if (mMap == null) {

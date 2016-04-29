@@ -45,42 +45,80 @@
             style="@style/ListItemTextInfo"
             android:paddingLeft="20dp" />
 
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="fitXY"
+            android:id="@+id/condIcon"
+            android:layout_below="@id/poi_detail_location"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="20dp"
+            android:layout_alignTop="@id/poi_detail_location"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/condDescr"
+            android:paddingRight="10dp"
+            android:textStyle="italic"
+            android:textColor="@color/grey"
+            android:textSize="20dp"
+            android:text="des"
+            android:layout_toRightOf="@id/condIcon"
+            android:layout_alignTop="@id/poi_detail_location"
+            android:layout_marginTop="40dp"
+
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/temp"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/grey"
+            android:textSize="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/condDescr"
+            android:layout_alignBaseline="@+id/condDescr"
+            android:text="temp"
+            />
+
         <RatingBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/poi_detail_ratingBar"
-            android:layout_below="@+id/poi_detail_location"
+            android:layout_below="@+id/condIcon"
             style="?android:attr/ratingBarStyleSmall"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp"
             android:numStars="5"
             android:stepSize="0.1"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/poi_detail_location"
+            android:layout_below="@id/condIcon"
             android:layout_toRightOf="@id/poi_detail_ratingBar"
             android:id="@+id/poi_detail_ratingScore"
             android:textSize="12dp"
             android:text="111"
             android:paddingRight="10dp"
             android:textStyle="italic"
-            android:textColor="@color/grey"
-            android:layout_marginTop="5dp"/>
+            android:textColor="@color/grey" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/poi_detail_location"
+            android:layout_below="@id/condIcon"
             android:layout_toRightOf="@id/poi_detail_ratingScore"
             android:id="@+id/poi_detail_ratingTimes"
             android:textSize="12dp"
             android:text="111"
             android:paddingRight="10dp"
             android:textStyle="italic"
-            android:textColor="@color/grey"
-            android:layout_marginTop="5dp"/>
+            android:textColor="@color/grey" />
+
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -121,6 +159,7 @@
             android:layout_width="wrap_content"
             android:layout_height="400dp"
             android:layout_below="@id/poi_detail_description"/>
+
     </RelativeLayout>
     </ScrollView>
 </LinearLayout>
