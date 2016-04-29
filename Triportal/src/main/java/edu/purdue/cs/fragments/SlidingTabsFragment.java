@@ -43,11 +43,13 @@ public class SlidingTabsFragment extends Fragment implements OnRefreshListener {
     @Override
     public void onRefresh(View v) {
         for(PagerItem item : mTabs) {
-            item.getFragment().refreshList();
+            if(item.getFragment().isCreated()) {
+                item.getFragment().refreshList();
+            }
         }
     }
 
-    public enum PagerItemTag {TRIP,DISCOVER}
+    public enum PagerItemTag {TRIP,DISCOVER,INVITATIONS}
 
 
 
@@ -107,6 +109,11 @@ public class SlidingTabsFragment extends Fragment implements OnRefreshListener {
                 getString(R.string.title_tab_discover),
                 new SharedItineraryListFragment(),
                 PagerItemTag.DISCOVER
+        ));
+        mTabs.add(new PagerItem(
+                getString(R.string.title_tab_joined),
+                new JoinedItineraryListFragment(),
+                PagerItemTag.INVITATIONS
         ));
 
 
