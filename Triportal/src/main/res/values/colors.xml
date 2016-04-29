@@ -13,6 +13,7 @@
     <color name="grey">#8A8A8A</color>
     <color name="green">#00BA00</color>
     <color name="light_green">#47FF47</color>
+    <color name="red">#771917</color>
 
     <!-- Search -->
     <color name="dialog_background">#7f000000</color>

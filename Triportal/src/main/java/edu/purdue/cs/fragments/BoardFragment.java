@@ -17,6 +17,7 @@
 package edu.purdue.cs.fragments;
 
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
@@ -32,6 +33,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.*;
 
 import android.support.v7.widget.PopupMenu;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.*;
 import android.view.animation.DecelerateInterpolator;
@@ -125,7 +127,7 @@ public class BoardFragment extends Fragment {
 
 
         //TODO: temporarily change to invisible due to workaround
-        mShareBtn.setVisibility(View.GONE);
+        //mShareBtn.setVisibility(View.GONE);
         mBoardView = (BoardView) view.findViewById(R.id.board_view);
         mBoardView.setSnapToColumnsWhenScrolling(true);
         mBoardView.setSnapToColumnWhenDragging(true);
@@ -223,15 +225,17 @@ public class BoardFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 LayoutInflater layoutInflater = LayoutInflater.from(mActivity);
-                View promptVIew = layoutInflater.inflate(R.layout.input_dialog, null);
+                View promptVIew = layoutInflater.inflate(R.layout.share_input_dialog, null);
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mActivity);
                 alertDialogBuilder.setView(promptVIew);
 
-                alertDialogBuilder.setCancelable(false).setPositiveButton("OK", new dialogListener());
-
+                //alertDialogBuilder.
+                alertDialogBuilder.setCancelable(false).setPositiveButton("OK",null);
+                alertDialogBuilder.setNegativeButton("Cancel",null);
                 //Toast.makeText(getContext(), "Add Poi", Toast.LENGTH_SHORT).show();
 
                 AlertDialog alert = alertDialogBuilder.create();
+                alert.setOnShowListener(new DialogListener(alert,(EditText) promptVIew.findViewById(R.id.share_input_dialog_edittext)));
                 alert.show();
 
             }
@@ -717,12 +721,54 @@ public class BoardFragment extends Fragment {
         }
     }
 
-    private class dialogListener implements DialogInterface.OnClickListener {
+    private class DialogListener implements DialogInterface.OnShowListener {
 
+        private AlertDialog mDialog;
+        private EditText mText;
+
+        public DialogListener(AlertDialog d,EditText text) {
+            mDialog = d;
+            mText = text;
+        }
 
         @Override
-        public void onClick(DialogInterface dialog, int which) {
+        public void onShow(final DialogInterface dialog) {
+            Button positive = mDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            positive.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final EditText text = mText;
+                    assert text != null;
+                    String comEmail = text.getText().toString();
+                    if(isValidEmail(text.getText())) {
+                        mItinerary.addCompanionInBackground(comEmail, new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if(e != null) {
+                                    text.setBackgroundColor(getResources().getColor(R.color.red));
+                                    Toast.makeText(mBoardView.getContext(), "User Not Found", Toast.LENGTH_LONG).show();
+                                    return;
+                                }
+                                mDialog.dismiss();
+                            }
+                        });
+                    } else {
+                        text.setBackgroundColor(getResources().getColor(R.color.red));
+                        Toast.makeText(mBoardView.getContext(), "Input Incorrect", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+            Button negative = mDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+            negative.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mDialog.dismiss();
+                }
+            });
+        }
 
+        public final boolean isValidEmail(CharSequence target) {
+            return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
         }
     }
 
