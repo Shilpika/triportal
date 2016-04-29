@@ -35,7 +35,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="88dp"
         android:tint="@android:color/white"
-        android:id="@+id/board_search_btn"
+        android:id="@+id/board_share_btn"
         android:elevation="1dp"
         android:background="@drawable/ribble"
         android:stateListAnimator="@anim/fab_anim"/>

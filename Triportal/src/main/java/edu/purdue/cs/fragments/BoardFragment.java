@@ -18,7 +18,6 @@ package edu.purdue.cs.fragments;
 
 
 import android.content.DialogInterface;
-import android.os.Handler;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
@@ -63,7 +62,7 @@ public class BoardFragment extends Fragment {
 
     private ImageButton mForkBtn;
     private ImageButton mAddBtn;
-    private ImageButton mSearchBtn;
+    private ImageButton mShareBtn;
 
     private ProgressBar mForkProgress;
 
@@ -118,7 +117,7 @@ public class BoardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.board_layout, container, false);
         mAddBtn = (ImageButton) view.findViewById(R.id.board_create_btn);
-        mSearchBtn = (ImageButton) view.findViewById(R.id.board_search_btn);
+        mShareBtn = (ImageButton) view.findViewById(R.id.board_share_btn);
         mForkBtn = (ImageButton) view.findViewById(R.id.board_fork_btn);
         mForkProgress = (ProgressBar) view.findViewById(R.id.board_fork_btn_progress);
 
@@ -126,7 +125,7 @@ public class BoardFragment extends Fragment {
 
 
         //TODO: temporarily change to invisible due to workaround
-        mSearchBtn.setVisibility(View.GONE);
+        mShareBtn.setVisibility(View.GONE);
         mBoardView = (BoardView) view.findViewById(R.id.board_view);
         mBoardView.setSnapToColumnsWhenScrolling(true);
         mBoardView.setSnapToColumnWhenDragging(true);
@@ -220,10 +219,11 @@ public class BoardFragment extends Fragment {
             }
         });
 
-        mSearchBtn.setOnClickListener(new View.OnClickListener() {
+        mShareBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Add Poi", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "Add Poi", Toast.LENGTH_SHORT).show();
+
             }
         });
 
