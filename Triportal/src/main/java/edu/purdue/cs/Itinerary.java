@@ -22,10 +22,21 @@ public class Itinerary extends ParseObject {
         return query;
     }
 
+    private ParseQuery<ParseUser> _getCompanions() {
+        ParseRelation<ParseUser> relation = this.getRelation("companions");
+        return relation.getQuery();
+    }
+
     static private ParseQuery<Itinerary> _getMyItineraryList() {
         ParseQuery<Itinerary> query = ParseQuery.getQuery(Itinerary.class);
         query.whereEqualTo("owner", ParseUser.getCurrentUser());
         query.orderByDescending("createdAt");
+        return query;
+    }
+
+    static private ParseQuery<Itinerary> _getJoinedItineraryList() {
+        ParseQuery<Itinerary> query = ParseQuery.getQuery(Itinerary.class);
+        query.whereEqualTo("companions", ParseUser.getCurrentUser());
         return query;
     }
 
@@ -188,6 +199,42 @@ public class Itinerary extends ParseObject {
         save();
     }
 
+    public void getCompanionsInBackground(final FindCallback<ParseUser> callback) {
+        _getCompanions().findInBackground(callback);
+    }
+
+    public List<ParseUser> getCompanions() throws ParseException {
+        return _getCompanions().find();
+    }
+
+    public void addCompanionInBackground(final String email, final SaveCallback callback) {
+        final Itinerary itinerary = this;
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo("email", email);
+        query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> users, ParseException e) {
+                if (e != null) {
+                    callback.done(e);
+                    return;
+                }
+                if (users.size() != 1) {
+                    callback.done(new ParseException(ParseException.EMAIL_NOT_FOUND, "Email not found."));
+                    return;
+                }
+                ParseRelation<ParseUser> relation = itinerary.getRelation("companions");
+                relation.add(users.get(0));
+                itinerary.saveInBackground(callback);
+            }
+        });
+    }
+
+    public void removeCompanionInBackground(final ParseUser user, final SaveCallback callback) {
+        ParseRelation<ParseUser> relation = this.getRelation("companions");
+        relation.remove(user);
+        this.saveInBackground(callback);
+    }
+
     public void forkInBackground(final FunctionCallback<Itinerary> callback) {
         ParseCloud.callFunctionInBackground("fork_itinerary", _fork(), new FunctionCallback<String>() {
             @Override
@@ -232,6 +279,16 @@ public class Itinerary extends ParseObject {
 
     static public List<Itinerary> getMyItineraryList() throws ParseException {
         ParseQuery<Itinerary> query = _getMyItineraryList();
+        return query.find();
+    }
+
+    static public void getJoinedItineraryListInBackground(FindCallback<Itinerary> callback) {
+        ParseQuery<Itinerary> query = _getJoinedItineraryList();
+        query.findInBackground(callback);
+    }
+
+    static public List<Itinerary> getJoinedItineraryList() throws ParseException {
+        ParseQuery<Itinerary> query = _getJoinedItineraryList();
         return query.find();
     }
 
